@@ -1,4 +1,4 @@
-# wdl_test
+# WDL Test
 
 Repos:
 
@@ -8,6 +8,7 @@ Repos:
 Seems to already exist:
 
 * https://dockstore.org/search?descriptorType=WDL&entryType=workflows&search=nextstrain
+* Terra Workspace: https://app.terra.bio/#workspaces/pathogen-genomic-surveillance/COVID-19_Broad_Viral_NGS
 
 References:
 
