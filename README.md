@@ -4,6 +4,7 @@
 
 * [ncov](https://github.com/nextstrain/ncov)
 * [zika-tutorial/wdl](https://github.com/nextstrain/zika-tutorial/tree/wdl)
+* [corneliusroemer/ncov-simplest](https://github.com/corneliusroemer/ncov-simplest)
 
 **Seems to already exist:**
 
