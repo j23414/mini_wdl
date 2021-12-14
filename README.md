@@ -27,4 +27,10 @@ The native install seems to require Java 11 (didn't want to mess up my nextflow 
 brew install cromwell
 ```
 
+* https://cromwell.readthedocs.io/en/stable/tutorials/FiveMinuteIntro/
+
+```
+cromwell run myWorkflow.wdl
+```
+
 
