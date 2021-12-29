@@ -39,17 +39,17 @@ cromwell run workflow.wdl -i inputs.json
 Output:
 
 ```
-ls -1 cromwell-executions/workflow/40e06f85-619c-40d3-a544-67b5e63a94e6/
+ls -1tr cromwell-executions/workflow/40e06f85-619c-40d3-a544-67b5e63a94e6/
 
-  |_ call-Align/
-  |_ call-Ancestral/
-  |_ call-Export/
-  |_ call-Filter/
-  |_ call-IndexSequences/
-  |_ call-Refine/
-  |_ call-Traits/
-  |_ call-Translate/
-  |_ call-Tree/
+|_ call-IndexSequences
+|_ call-Filter
+|_ call-Align
+|_ call-Tree
+|_ call-Refine
+|_ call-Ancestral
+|_ call-Traits
+|_ call-Translate
+|_ call-Export
     |_ zika.json        #<= this one!
 ```
 
