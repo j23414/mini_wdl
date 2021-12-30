@@ -53,6 +53,26 @@ ls -1tr cromwell-executions/workflow/40e06f85-619c-40d3-a544-67b5e63a94e6/
     |_ zika.json        #<= this one!
 ```
 
+### Option 1: wrap it in one task
+
+This was more difficult than expected. I was expecting to use
+
+```
+nextstrain build --cpus ${input_dir}
+```
+
+But kept hitting `bin/docker` errors, so used the snakemake command directly. Even then, the output files took a while to reroute.
+
+```
+git clone https://github.com/nextstrain/zika-tutorial.git
+cromwell run workflow.wdl -i one.json
+
+ls -1tr cromwell-executions/Nextstrain_WRKFLW/254d2b55-a0d6-4b52-841d-5e3fc430b83e/call-build/execution/
+
+#> results/
+#> auspice/
+```
+
 
 
 
