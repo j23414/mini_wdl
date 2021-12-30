@@ -73,6 +73,33 @@ ls -1tr cromwell-executions/Nextstrain_WRKFLW/254d2b55-a0d6-4b52-841d-5e3fc430b8
 #> auspice/
 ```
 
+## Debug Notes
 
+Cromwell runs creates a `cromwell-execution` folder. (In comparison, Nextflow creates a `work` folder. I'm not sure if Snakemake creates a cache folder.) Haven't figured out how to reroute the cromwell output to a separate folder yet.
 
-
+```
+cromwell-executions/
+  |_ Nextstrain_WRKFLW/
+    |_ 6995bcdf-6c11-4a08-ab08-94bacc5796b2/
+      |_ call-build/
+        |_ tmp.760887c3
+        |
+        |_ inputs/
+        | |_ -414136411/
+        |   |_ zika-tutorial/
+        |
+        |_ execution/
+          |_ script
+          |_ script.background
+          |_ script.submit
+          |_ docker_cid
+          |_ rc
+          |
+          |_ stdout    #<= check these files to debug
+          |_ stderr    #<=
+          |_ stdout.background
+          |_ stderr.background
+          |
+          |_ results/  #<= output, must be in this folder, can't be in input folder or it will fail
+          |_ auspice/
+```
