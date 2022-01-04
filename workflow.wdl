@@ -5,6 +5,7 @@ version 1.0
 import "tasks/augur.wdl" as augur
 # Option 2: As one wrapped task
 import "tasks/nextstrain.wdl" as nextstrain
+import "tasks/ncov.wdl" as ncov
 
 # Modified https://github.com/nextstrain/zika-tutorial/blob/wdl/wdl/zika-tutorial.wdl
 # + moved tasks to modules
@@ -97,19 +98,27 @@ import "tasks/nextstrain.wdl" as nextstrain
 #     }
 # }
 
-workflow Nextstrain_WRKFLW {
-    input {
-        File input_dir
-        String docker_path
-    }
+# workflow Nextstrain_WRKFLW {
+#     input {
+#         File input_dir
+#         String docker_path
+#     }
+# 
+#     call nextstrain.nextstrain_build as build {
+#         input:
+#             input_dir = input_dir,
+#             dockerImage = docker_path
+#     }
+# 
+#     output {
+#         File auspice_dir = build.auspice_dir
+#     }
+# }
 
-    call nextstrain.nextstrain_build as build {
-        input:
-            input_dir = input_dir,
-            dockerImage = docker_path
-    }
-
+workflow Pull {
+    call ncov.git_pull_ncov as git_pull_ncov
+    
     output {
-        File auspice_dir = build.auspice_dir
+        File ncov_path = git_pull_ncov.ncov_path
     }
 }
