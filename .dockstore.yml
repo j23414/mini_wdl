@@ -1,6 +1,6 @@
 version: 1.2
 workflows:
-  - subclass: wdl
-    primaryDescriptorPath: /workflow.wdl
-    testParameterFiles: /one.json
-    publish: True
+   - subclass: WDL
+     primaryDescriptorPath: /workflow.wdl
+     testParameterFiles:
+     - /one.json
