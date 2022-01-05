@@ -237,3 +237,86 @@ task Export {
 # task validate { }
 # task import { }
 # task sanitize {} ? :)
+
+
+workflow ZikaTutorial {
+    input {
+        File input_fasta
+        File input_metadata
+        File exclude
+        File reference
+        File colors
+        File lat_longs
+        File auspice_config
+        String docker_path
+    }
+
+    call IndexSequences {
+        input:
+            input_fasta = input_fasta,
+            dockerImage = docker_path
+
+    }
+    call Filter {
+        input:
+            input_fasta = input_fasta,
+            sequence_index = IndexSequences.sequence_index,
+            input_metadata = input_metadata,
+            exclude = exclude,
+            dockerImage = docker_path
+    }
+    call Align {
+        input:
+            filtered_sequences = Filter.filtered_sequences,
+            reference = reference,
+            dockerImage = docker_path
+    }
+    call Tree {
+        input:
+            alignment = Align.alignment,
+            dockerImage = docker_path
+    }
+    call Refine {
+        input:
+            tree = Tree.tree,
+            alignment = Align.alignment,
+            input_metadata = input_metadata,
+            dockerImage = docker_path
+    }
+    call Ancestral {
+        input:
+            time_tree = Refine.time_tree,
+            alignment = Align.alignment,
+            dockerImage = docker_path
+    }
+    call Translate {
+        input:
+            time_tree = Refine.time_tree,
+            nt_muts = Ancestral.nt_muts,
+            reference = reference,
+            dockerImage = docker_path
+    }
+    call Traits {
+        input:
+            time_tree = Refine.time_tree,
+            input_metadata = input_metadata,
+            dockerImage = docker_path
+    }
+    call Export {
+        input:
+            time_tree = Refine.time_tree,
+            input_metadata = input_metadata,
+            branch_lengths = Refine.branch_lengths,
+            traits = Traits.traits,
+            nt_muts = Ancestral.nt_muts,
+            aa_muts = Translate.aa_muts,
+            colors = colors,
+            lat_longs = lat_longs,
+            auspice_config = auspice_config,
+            dockerImage = docker_path
+    }
+
+    output {
+        File auspice_json = Export.auspice_json
+    }
+}

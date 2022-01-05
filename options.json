@@ -1,0 +1,11 @@
+{
+  "default_runtime_attributes": {
+    "docker": "nextstrain/base:latest",
+    "zones": "us-central1-c us-central1-b"
+  },
+  
+  "final_workflow_outputs_dir" : "results",
+  "use_relative_output_paths" : true,
+  "final_workflow_log_dir" : "results/wf_logs",
+  "final_call_logs_dir" : "results/call_logs"
+}

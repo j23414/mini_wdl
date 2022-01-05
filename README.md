@@ -31,15 +31,32 @@ brew install cromwell
 
 ```
 # Start docker deamon
-ln -s zika-tutorial/data .
-ln -s zika-tutorial/config .
-cromwell run workflow.wdl -i inputs.json
+
+# Option 1: one wrapped task
+cromwell run workflow.wdl \
+  -i inputs_option1.json \
+  -o options.json \
+  &> log.txt
+
+# Option 2: separate tasks
+git clone https://github.com/nextstrain/zika-tutorial.git
+
+cromwell run workflow.wdl \
+  -i inputs_option2.json \
+  -o options.json \
+  &> log.txt
 ```
 
 Output:
 
 ```
-ls -1tr cromwell-executions/workflow/40e06f85-619c-40d3-a544-67b5e63a94e6/
+# Option 1
+ls -1tr results
+
+|_ auspice/  #<= this one
+
+# Option 2
+ls -1tr results
 
 |_ call-IndexSequences
 |_ call-Filter
@@ -51,26 +68,6 @@ ls -1tr cromwell-executions/workflow/40e06f85-619c-40d3-a544-67b5e63a94e6/
 |_ call-Translate
 |_ call-Export
     |_ zika.json        #<= this one!
-```
-
-### Option 1: wrap it in one task
-
-This was more difficult than expected. I was expecting to use
-
-```
-nextstrain build --cpus ${input_dir}
-```
-
-But kept hitting `bin/docker` errors, so used the snakemake command directly. Even then, the output files took a while to reroute.
-
-```
-git clone https://github.com/nextstrain/zika-tutorial.git
-cromwell run workflow.wdl -i one.json
-
-ls -1tr cromwell-executions/Nextstrain_WRKFLW/254d2b55-a0d6-4b52-841d-5e3fc430b83e/call-build/execution/
-
-#> results/
-#> auspice/
 ```
 
 ## Debug Notes
