@@ -1,10 +1,11 @@
 version 1.0
 # https://docs.dockstore.org/en/develop/advanced-topics/best-practices/wdl-best-practices.html
 
-# Option 1: As individual modules
-import "tasks/augur.wdl" as augur
-# Option 2: As one wrapped task
+# Option 1: As one wrapped task
 import "tasks/nextstrain.wdl" as nextstrain
+# Option 2: As individual modules
+import "tasks/augur.wdl" as augur
+
 
 import "tasks/ncov.wdl" as ncov
 
@@ -16,7 +17,6 @@ import "tasks/ncov.wdl" as ncov
 # TODO: Export task should accept Tree or Tree + other output
 # TODO: Add slurm run or config and have an easy way to switch between Terra/slurm/aws?
 
-# Option 1: Wrap everything
 workflow Nextstrain_WRKFLW {
   input {
     # Option 1 Input
@@ -36,6 +36,7 @@ workflow Nextstrain_WRKFLW {
     String docker_path = "nextstrain/base:latest"
   }
 
+  # Optional pre-run step, pull data/scripts from a github repo
   if (pullncovflag) {
     call ncov.pull_zika as pull_zika
 
