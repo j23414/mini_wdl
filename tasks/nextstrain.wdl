@@ -58,7 +58,7 @@ task nextstrain_build_zika {
         cp -rf zika-tutorial/auspice auspice  
     }
     output {
-        File auspice_dir = "auspice/*.json"
+        File auspice_dir = "auspice/zika.json" # wild cards?
 #        File results_dir = "results"
     }
     runtime {
