@@ -40,9 +40,9 @@ workflow Nextstrain_WRKFLW {
   if (pullncovflag) {
     call ncov.pull_zika as pull_zika
 
-    call nextstrain.nextstrain_build as builda {
+    call nextstrain.nextstrain_build_zika as builda {
       input:
-        input_dir = pull_zika.zika_path,
+        input_zip = pull_zika.zika_path,
         dockerImage = docker_path
     }
   }

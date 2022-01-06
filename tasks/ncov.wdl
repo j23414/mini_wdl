@@ -7,11 +7,10 @@ task pull_ncov {
   }
   command {
     wget ~{giturl}
-    unzip v10.zip
-    mv ncov-10 ncov
+    mv v10.zip ncov.zip
   }
   output {
-    File ncov_path = "ncov"
+    File ncov_path = "ncov.zip"
   }
   runtime {
     docker : docker_img
@@ -25,11 +24,10 @@ task pull_zika {
   }
   command {
     wget ~{giturl}
-    unzip master.zip
-    mv zika-tutorial-master zika-tutorial
+    mv master.zip zika-tutorial.zip
   }
   output {
-    File zika_path = "zika-tutorial"
+    File zika_path = "zika-tutorial.zip"
   }
   runtime {
     docker : docker_img
