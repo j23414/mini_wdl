@@ -1,0 +1,4 @@
+{
+  "Nextstrain_WRKFLW.pullncovflag": true,
+  "Nextstrain_WRKFLW.docker_path": "nextstrain/base:latest"
+}

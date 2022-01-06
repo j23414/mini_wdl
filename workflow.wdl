@@ -14,7 +14,6 @@ import "tasks/ncov.wdl" as ncov
 
 # TODO: Wrap a script in a wdl task
 # TODO: Export task should accept Tree or Tree + other output
-# TODO: Get output files out of cromwell-execution, to an easier to reach place
 # TODO: Add slurm run or config and have an easy way to switch between Terra/slurm/aws?
 
 # Option 1: Wrap everything
@@ -33,11 +32,22 @@ workflow Nextstrain_WRKFLW {
     File? auspice_config
 
     # Both
-    String docker_path
+    Boolean pullncovflag = false
+    String docker_path = "nextstrain/base:latest"
+  }
+
+  if (pullncovflag) {
+    call ncov.pull_zika as pull_zika
+
+    call nextstrain.nextstrain_build as builda {
+      input:
+        input_dir = pull_zika.zika_path,
+        dockerImage = docker_path
+    }
   }
 
   # Option 1: Wrap everything if input_dir is defined
-  if (defined(input_dir)) {
+  if (defined(input_dir) && !pullncovflag ) {
     call nextstrain.nextstrain_build as build {
       input:
         input_dir = select_first([input_dir]),
@@ -46,7 +56,7 @@ workflow Nextstrain_WRKFLW {
   } # No else statements? Weird
 
   # Option 2: Run it one by one if not
-  if (!defined(input_dir)) {
+  if (!defined(input_dir) && !pullncovflag) {
     call augur.IndexSequences as IndexSequences {
       input:
         input_fasta = select_first([input_fasta]),
@@ -114,7 +124,8 @@ workflow Nextstrain_WRKFLW {
   }
 
   output {
-    File auspice_dir = "~{if defined(build.auspice_dir) then build.auspice_dir else Export.auspice_json}"
+    File auspice_dir = select_first([builda.auspice_dir, build.auspice_dir, Export.auspice_json])
+#    File auspice_dir = "~{if defined(build.auspice_dir) then build.auspice_dir else Export.auspice_json}"
   }
 }
 

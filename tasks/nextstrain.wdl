@@ -5,15 +5,17 @@ task nextstrain_build {
     input {
         File input_dir
         String dockerImage
+        String nextstrain_app = "nextstrain"
     }
     command {
         PROC=`nproc`
-        nextstrain build --cpus $PROC --native "${input_dir}"
+        "~{nextstrain_app}" build --cpus $PROC --native "${input_dir}"
         cp -rf "${input_dir}/results" results
         cp -rf "${input_dir}/auspice" auspice  
     }
     output {
         File auspice_dir = "auspice"
+        File results_dir = "results"
     }
     runtime {
         docker: dockerImage
