@@ -6,10 +6,15 @@ task nextstrain_build {
         File input_dir
         String dockerImage
         String nextstrain_app = "nextstrain"
+        String giturl = "https://github.com/nextstrain/zika-tutorial/archive/refs/heads/master.zip"
     }
     command {
+        wget ~{giturl}
+        mv master.zip zika-tutorial.zip
+        unzip zika-tutorial.zip
+        
         PROC=`nproc`
-        "~{nextstrain_app}" build --cpus $PROC --native "${input_dir}"
+        "~{nextstrain_app}" build --cpus $PROC --native zika-tutorial-master
         cp -rf "${input_dir}/results" results
         cp -rf "${input_dir}/auspice" auspice  
     }
