@@ -37,95 +37,95 @@ workflow Nextstrain_WRKFLW {
   }
 
   # Optional pre-run step, pull data/scripts from a github repo
-  if (pullncovflag) {
-    call ncov.pull_zika as pull_zika
-
-    call nextstrain.nextstrain_build_zika as builda {
-      input:
-        input_zip = pull_zika.zika_path,
-        dockerImage = docker_path
-    }
-  }
-
-  # Option 1: Wrap everything if input_dir is defined
-  if (defined(input_dir) && !pullncovflag ) {
-    call nextstrain.nextstrain_build as build {
-      input:
-        input_dir = select_first([input_dir]),
-        dockerImage = docker_path
-    }
-  } # No else statements? Weird
-
-  # Option 2: Run it one by one if not
-  if (!defined(input_dir) && !pullncovflag) {
-    call augur.IndexSequences as IndexSequences {
-      input:
-        input_fasta = select_first([input_fasta]),
-        dockerImage = docker_path
-
-    }
-    call augur.Filter as Filter {
-      input:
-        input_fasta = select_first([input_fasta]),
-        sequence_index = IndexSequences.sequence_index,
-        input_metadata = select_first([input_metadata]),
-        exclude = select_first([exclude]),
-        dockerImage = docker_path
-    }
-    call augur.Align as Align {
-      input:
-        filtered_sequences = Filter.filtered_sequences,
-        reference = select_first([reference]),
-        dockerImage = docker_path
-    }
-    call augur.Tree as Tree {
-      input:
-        alignment = Align.alignment,
-        dockerImage = docker_path
-    }
-    call augur.Refine as Refine {
-      input:
-        tree = Tree.tree,
-        alignment = Align.alignment,
-        input_metadata = select_first([input_metadata]),
-        dockerImage = docker_path
-    }
-    call augur.Ancestral as Ancestral {
-      input:
-        time_tree = Refine.time_tree,
-        alignment = Align.alignment,
-        dockerImage = docker_path
-    }
-    call augur.Translate as Translate {
-      input:
-        time_tree = Refine.time_tree,
-        nt_muts = Ancestral.nt_muts,
-        reference = select_first([reference]),
-        dockerImage = docker_path
-    }
-    call augur.Traits as Traits {
-      input:
-        time_tree = Refine.time_tree,
-        input_metadata = select_first([input_metadata]),
-        dockerImage = docker_path
-    }
-    call augur.Export as Export {
-      input:
-        time_tree = Refine.time_tree,
-        input_metadata = select_first([input_metadata]),
-        branch_lengths = Refine.branch_lengths,
-        traits = Traits.traits,
-        nt_muts = Ancestral.nt_muts,
-        aa_muts = Translate.aa_muts,
-        colors = select_first([colors]),
-        lat_longs = select_first([lat_longs]),
-        auspice_config = select_first([auspice_config]),
-        dockerImage = docker_path
-    }
-  }
+  #if (pullncovflag) {
+  #  call ncov.pull_zika as pull_zika
+#
+  #  call nextstrain.nextstrain_build_zika as builda {
+  #    input:
+  #      input_zip = pull_zika.zika_path,
+  #      dockerImage = docker_path
+  #  }
+  #}
+#
+  ## Option 1: Wrap everything if input_dir is defined
+  #if (defined(input_dir) && !pullncovflag ) {
+   call nextstrain.nextstrain_build as build {
+     input:
+       #input_dir = select_first([input_dir]),
+       dockerImage = docker_path
+   }
+  #} # No else statements? Weird
+#
+  ## Option 2: Run it one by one if not
+  #if (!defined(input_dir) && !pullncovflag) {
+  #  call augur.IndexSequences as IndexSequences {
+  #    input:
+  #      input_fasta = select_first([input_fasta]),
+  #      dockerImage = docker_path
+#
+  #  }
+  #  call augur.Filter as Filter {
+  #    input:
+  #      input_fasta = select_first([input_fasta]),
+  #      sequence_index = IndexSequences.sequence_index,
+  #      input_metadata = select_first([input_metadata]),
+  #      exclude = select_first([exclude]),
+  #      dockerImage = docker_path
+  #  }
+  #  call augur.Align as Align {
+  #    input:
+  #      filtered_sequences = Filter.filtered_sequences,
+  #      reference = select_first([reference]),
+  #      dockerImage = docker_path
+  #  }
+  #  call augur.Tree as Tree {
+  #    input:
+  #      alignment = Align.alignment,
+  #      dockerImage = docker_path
+  #  }
+  #  call augur.Refine as Refine {
+  #    input:
+  #      tree = Tree.tree,
+  #      alignment = Align.alignment,
+  #      input_metadata = select_first([input_metadata]),
+  #      dockerImage = docker_path
+  #  }
+  #  call augur.Ancestral as Ancestral {
+  #    input:
+  #      time_tree = Refine.time_tree,
+  #      alignment = Align.alignment,
+  #      dockerImage = docker_path
+  #  }
+  #  call augur.Translate as Translate {
+  #    input:
+  #      time_tree = Refine.time_tree,
+  #      nt_muts = Ancestral.nt_muts,
+  #      reference = select_first([reference]),
+  #      dockerImage = docker_path
+  #  }
+  #  call augur.Traits as Traits {
+  #    input:
+  #      time_tree = Refine.time_tree,
+  #      input_metadata = select_first([input_metadata]),
+  #      dockerImage = docker_path
+  #  }
+  #  call augur.Export as Export {
+  #    input:
+  #      time_tree = Refine.time_tree,
+  #      input_metadata = select_first([input_metadata]),
+  #      branch_lengths = Refine.branch_lengths,
+  #      traits = Traits.traits,
+  #      nt_muts = Ancestral.nt_muts,
+  #      aa_muts = Translate.aa_muts,
+  #      colors = select_first([colors]),
+  #      lat_longs = select_first([lat_longs]),
+  #      auspice_config = select_first([auspice_config]),
+  #      dockerImage = docker_path
+  #  }
+  #}
 
   output {
-    File auspice_dir = select_first([builda.auspice_dir, build.auspice_dir, Export.auspice_json])
+    File auspice_dir = build.auspice_dir # select_first([builda.auspice_dir, build.auspice_dir, Export.auspice_json])
 #    File auspice_dir = "~{if defined(build.auspice_dir) then build.auspice_dir else Export.auspice_json}"
   }
 }
