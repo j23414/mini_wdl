@@ -3,6 +3,7 @@ version 1.0
 # Preferred option
 task nextstrain_build {
     input {
+        File? build_yaml
         String indir = "zika-tutorial-master"
         String outfile = "zika"
         String dockerImage
@@ -14,7 +15,12 @@ task nextstrain_build {
         unzip master.zip
 
         PROC=`nproc`
-        "~{nextstrain_app}" build --cpus $PROC --native ~{indir}
+        
+        "~{nextstrain_app}" build \
+          --cpus $PROC \
+          --native ~{indir} \
+          ${"--configfile " + build_yaml}
+
     }
     output {
         File auspice_dir = "~{indir}/auspice/~{outfile}.json"
