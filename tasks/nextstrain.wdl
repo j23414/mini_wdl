@@ -3,30 +3,26 @@ version 1.0
 # Preferred option
 task nextstrain_build {
     input {
-        File? input_dir
+        String indir = "zika-tutorial-master"
+        String outfile = "zika"
         String dockerImage
         String nextstrain_app = "nextstrain"
         String giturl = "https://github.com/nextstrain/zika-tutorial/archive/refs/heads/master.zip"
     }
     command {
         wget ~{giturl}
-        mv master.zip zika-tutorial.zip
-        unzip zika-tutorial.zip
+        unzip master.zip
 
         PROC=`nproc`
-        "~{nextstrain_app}" build --cpus $PROC --native zika-tutorial-master
+        "~{nextstrain_app}" build --cpus $PROC --native ~{indir}
     }
     output {
-        File auspice_dir = "zika-tutorial-master/auspice"
-#        File results_dir = "zi/results"
+        File auspice_dir = "~{indir}/auspice/~{outfile}.json"
     }
     runtime {
         docker: dockerImage
     }
 }
-
-        #cp -rf "${input_dir}/results" results
-        #cp -rf "${input_dir}/auspice" auspice 
 
 # Snakemake option
 task nextstrain_build_snakemake {
@@ -65,7 +61,6 @@ task nextstrain_build_zika {
     }
     output {
         File auspice_dir = "auspice/zika.json" # wild cards?
-#        File results_dir = "results"
     }
     runtime {
         docker: dockerImage
