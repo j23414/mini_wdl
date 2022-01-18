@@ -1,6 +1,5 @@
 {
   "Nextstrain_WRKFLW.indir" : "zika-tutorial-master",
-  "Nextstrain_WRKFLW.outfile" : "zika",
   "Nextstrain_WRKFLW.giturl" : "https://github.com/nextstrain/zika-tutorial/archive/refs/heads/master.zip",  
   "Nextstrain_WRKFLW.docker_path": "nextstrain/base:latest"
 }

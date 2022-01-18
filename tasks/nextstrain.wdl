@@ -5,7 +5,6 @@ task nextstrain_build {
     input {
         File? build_yaml
         String indir = "zika-tutorial-master"
-        String outfile = "zika"
         String dockerImage
         String nextstrain_app = "nextstrain"
         String giturl = "https://github.com/nextstrain/zika-tutorial/archive/refs/heads/master.zip"
@@ -23,7 +22,7 @@ task nextstrain_build {
 
     }
     output {
-        File auspice_dir = "~{indir}/auspice/~{outfile}.json"
+        Array[File] auspice_dir = glob("~{indir}/auspice/*.json")
     }
     runtime {
         docker: dockerImage
