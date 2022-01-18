@@ -2,10 +2,7 @@
 
 **Repos:**
 
-* [ncov](https://github.com/nextstrain/ncov)
-* [zika-tutorial/wdl](https://github.com/nextstrain/zika-tutorial/tree/wdl)
-* [corneliusroemer/ncov-simplest](https://github.com/corneliusroemer/ncov-simplest)
-* [theiagen/public\_health\_viral\_genomics](https://github.com/theiagen/public_health_viral_genomics)
+* [ncov](https://github.com/nextstrain/ncov) | [zika-tutorial/wdl](https://github.com/nextstrain/zika-tutorial/tree/wdl) | [corneliusroemer/ncov-simplest](https://github.com/corneliusroemer/ncov-simplest) | [theiagen/public\_health\_viral\_genomics](https://github.com/theiagen/public_health_viral_genomics)
 
 **Seems to already exist:**
 
@@ -33,17 +30,26 @@ brew install cromwell
 ```
 # Start docker deamon
 
-# Option 1: one wrapped task
+# Terra workflow
 cromwell run workflow.wdl \
-  -i inputs_option1.json \
+  -i input_ncov.json \
+  -o options.json \
+  &> log.txt
+```
+
+A general purpose version in `flex.wdl`
+
+```
+# Option 1: one wrapped task
+git clone https://github.com/nextstrain/zika-tutorial.git
+cromwell run flex.wdl \
+  -i flex_input_1.json \
   -o options.json \
   &> log.txt
 
 # Option 2: separate tasks
-git clone https://github.com/nextstrain/zika-tutorial.git
-
-cromwell run workflow.wdl \
-  -i inputs_option2.json \
+cromwell run flex.wdl \
+  -i flex_inputs_2.json \
   -o options.json \
   &> log.txt
 ```

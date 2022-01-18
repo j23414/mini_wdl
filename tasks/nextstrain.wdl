@@ -49,26 +49,3 @@ task nextstrain_build_snakemake {
         docker: dockerImage
     }
 }
-
-# Test this first, generalize later
-task nextstrain_build_zika {
-    input {
-        File input_zip
-        String dockerImage
-        String nextstrain_app = "nextstrain"
-    }
-    command {
-        PROC=`nproc`
-        unzip ~{input_zip}
-        mv zika-tutorial-master zika-tutorial
-        "~{nextstrain_app}" build --cpus $PROC --native zika-tutorial
-        cp -rf zika-tutorial/results results
-        cp -rf zika-tutorial/auspice auspice  
-    }
-    output {
-        File auspice_dir = "auspice/zika.json" # wild cards?
-    }
-    runtime {
-        docker: dockerImage
-    }
-}
