@@ -1,6 +1,5 @@
 {
   "Nextstrain_WRKFLW.build_yaml" : "build.yaml",
-  "Nextstrain_WRKFLW.indir" : "ncov-master",
   "Nextstrain_WRKFLW.giturl" : "https://github.com/nextstrain/ncov/archive/refs/heads/master.zip",
   "Nextstrain_WRKFLW.docker_path": "nextstrain/base:latest"
 }

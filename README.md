@@ -2,7 +2,7 @@
 
 **Repos:**
 
-* [ncov](https://github.com/nextstrain/ncov) | [zika-tutorial/wdl](https://github.com/nextstrain/zika-tutorial/tree/wdl) | [corneliusroemer/ncov-simplest](https://github.com/corneliusroemer/ncov-simplest) | [theiagen/public\_health\_viral\_genomics](https://github.com/theiagen/public_health_viral_genomics)
+[nextstrain/ncov](https://github.com/nextstrain/ncov) | [zika-tutorial/wdl](https://github.com/nextstrain/zika-tutorial/tree/wdl) | [corneliusroemer/ncov-simplest](https://github.com/corneliusroemer/ncov-simplest) | [theiagen/public\_health\_viral\_genomics](https://github.com/theiagen/public_health_viral_genomics)
 
 **Seems to already exist:**
 
