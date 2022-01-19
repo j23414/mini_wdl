@@ -25,7 +25,8 @@ workflow Nextstrain_WRKFLW {
     call mk_buildconfig {
       input:
         sequence_fasta = select_first([sequence_fasta]),
-        metadata_tsv = select_first([metadata_tsv])
+        metadata_tsv = select_first([metadata_tsv]),
+        dockerImage = docker_path
     }
   } 
 
@@ -47,6 +48,7 @@ task mk_buildconfig {
   input {
     File sequence_fasta
     File metadata_tsv
+    String dockerImage
   }
   command {
     cat << EOF > build.yaml
@@ -61,6 +63,9 @@ task mk_buildconfig {
   }
   output {
     File buildconfig = "build.yaml"
+  }
+  runtime {
+    docker: dockerImage
   }
 }
 
