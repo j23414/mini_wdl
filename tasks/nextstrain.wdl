@@ -23,10 +23,13 @@ task nextstrain_build {
           --native $INDIR \
           ${"--configfile " + build_yaml}
 
+        # Prepare output
         mv $INDIR/auspice .
+        zip -r auspice.zip auspice
     }
     output {
-        Array[File] auspice_dir = glob("auspice/*.json")
+        File auspice_zip = "auspice.zip"
+        Array[File] json_files = glob("auspice/*.json")
     }
     runtime {
         docker: dockerImage
@@ -51,8 +54,8 @@ task nextstrain_build_snakemake {
         zip -r auspice.zip auspice
     }
     output {
-        File auspice_dir = "auspice.zip"
-        Array[File] auspice_dir = glob("auspice/*.json")
+        Array[File] json_files = glob("auspice/*.json")
+        File auspice_zip = "auspice.zip"
     }
     runtime {
         docker: dockerImage

@@ -107,3 +107,17 @@ cromwell-executions/
           |_ results/  #<= output, must be in this folder, can't be in input folder or it will fail
           |_ auspice/
 ```
+
+## Generating a build config
+
+So apparently the HEREDOC will expand entire file path.
+
+```
+inputs:
+- name: example
+  metadata: /cromwell-executions/Nextstrain_WRKFLW/18bf94cf-8eb3-4079-ab97-beec05296b01/call-mk_buildconfig/inputs/-613910572/metadata.tsv
+  sequences: /cromwell-executions/Nextstrain_WRKFLW/18bf94cf-8eb3-4079-ab97-beec05296b01/call-mk_buildconfig/inputs/-613910572/sequences.fasta
+- name: references
+  metadata: data/references_metadata.tsv
+  sequences: data/references_sequences.fasta
+```
