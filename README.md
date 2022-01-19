@@ -110,7 +110,7 @@ cromwell-executions/
 
 ## Generating a build config
 
-So apparently the HEREDOC will expand entire file path.
+So apparently the HEREDOC will expand entire file path. Worked on Terra, which was a surprise.
 
 ```
 inputs:

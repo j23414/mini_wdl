@@ -8,8 +8,6 @@ workflow Nextstrain_WRKFLW {
     File? build_yaml
 
     # Option 2: create a build_yaml from sequence and metadata
-    # Potential problems, needs to be passed into task (for localization)
-    # Setting these as Strings instead of Files bypasses the problem, but is weird UI
     File? sequence_fasta
     File? metadata_tsv
 
@@ -46,7 +44,7 @@ workflow Nextstrain_WRKFLW {
 # === Draft tasks here, move to module later
 task mk_buildconfig {
   input {
-    File sequence_fasta
+    File sequence_fasta  # Could change this to Array[File] and loop the HEREDOC
     File metadata_tsv
     String dockerImage
   }
@@ -68,24 +66,3 @@ task mk_buildconfig {
     docker: dockerImage
   }
 }
-
-#task mk_buildconfig {
-#  input {
-#    String sequence_fasta
-#    String metadata_tsv
-#  }
-#  command {
-#    cat << EOF > build.yaml
-#    inputs:
-#    - name: example
-#      metadata: ~{metadata_tsv}
-#      sequences: ~{sequence_fasta}
-#    - name: references
-#      metadata: data/references_metadata.tsv
-#      sequences: data/references_sequences.fasta
-#    EOF
-#  }
-#  output {
-#    File buildconfig = "build.yaml"
-#  }
-#}
