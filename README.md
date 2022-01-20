@@ -6,7 +6,69 @@
 
 ![](data/screenshot.png)
 
-<details><summary>View other notes</summary>
+## Local Testing
+
+The native install seems to require Java 11. On macOS, installed `cromwell` via Homebrew ([ONT Installing Dependencies](https://dockstore.org/workflows/github.com/aryeelab/nanopore_tools/combine_sample_sheets:dev?tab=info), [Cromwell's 5 minute tutorial](https://cromwell.readthedocs.io/en/stable/tutorials/FiveMinuteIntro/))
+
+```
+brew install cromwell
+```
+
+Run `Zika` tutorial
+
+```
+cromwell run workflow.wdl \
+  -i input_zika.json \
+  -o options.json \
+  &> log.txt
+```
+
+Run `ncov` tutorial
+
+```
+cromwell run workflow.wdl \
+  -i input_ncov.json \
+  -o options.json \
+  &> log.txt
+```
+
+Run `ncov` on your own `sequences.fasta` and `metadata.tsv`
+
+```
+cromwell run workflow.wdl \
+  -i input_seqmet.json \
+  -o options.json \
+  &> log.txt
+```
+
+The Terra results will look like
+
+```
+cromwell-executions/
+|_ Nextstrain_WRKFLW/
+  |_ 0712e720-bbd0-454b-ae4e-21337d0b98b7/
+    |_ call-mk_buildconfig/
+    |_ call-build/
+      |_ inputs/
+      |_ execution/
+        |_ auspice/      #<= here
+
+```
+
+The local results will look like
+
+```
+results/
+  |_ wf_logs/
+  |_ call_logs/
+  |
+  |_ auspice.zip
+  |_ glob-XXXXX/*.json
+```
+
+## Other Notes
+
+<details><summary>Expand and view</summary>
 
 **Repos:**
 
