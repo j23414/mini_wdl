@@ -4,9 +4,9 @@ version 1.0
 task nextstrain_build {
   input {
     File? build_yaml
-    String dockerImage
+    String dockerImage = "nextstrain/base:latest"
     String nextstrain_app = "nextstrain"
-    String giturl = "https://github.com/nextstrain/zika-tutorial/archive/refs/heads/master.zip"
+    String giturl = "https://github.com/nextstrain/ncov/archive/refs/heads/master.zip"
     Int cpu = 8         # Honestly, I'd max this out unless budget is a consideration.
     Int disk_size = 30  # In GiB.  Could also check size of sequence or metadata files
     Float memory = 3.5 
