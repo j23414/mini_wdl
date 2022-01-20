@@ -4,7 +4,7 @@
 2. Launch with "Terra" and add to your workspace
 3. Link the relevant inputs and hit "Run Analysis"
 
-![](data/screenshot.png)
+![image of Terra inputs](data/screenshot.png)
 
 ## Local Testing
 
