@@ -73,3 +73,10 @@ task mk_buildconfig {
     disks: "local-disk " + disk_size + " HDD"
   }
 }
+
+# Public Reference Datasets
+# nextstrain remote ls s3://nextstrain-data/files/ncov/open &> list.txt
+# files/ncov/open/LOCATION/metadata.tsv.xz where LOCATION = one of ['africa', 'asia', 'europe', 'global', 'north-america', 'oceania', 'south-america']
+# files/ncov/open/LOCATION/sequences.fasta.xz
+# TODO: since these are all s3, just generate string (avaid download and localazation/delocalization) for the mk_buildconfig
+# Clarification: Do these need to be sampled down?
