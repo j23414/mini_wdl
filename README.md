@@ -1,4 +1,12 @@
-# WDL Test
+# mini_wdl
+
+1. Go to the `mini_wdl` workflow from [Dockstore](https://dockstore.org/workflows/github.com/j23414/mini_wdl:archive_2022-01-19?tab=info)
+2. Launch with "Terra" and add to your workspace
+3. Link the relevant inputs and hit "Run Analysis"
+
+![](data/screenshot.png)
+
+<details><summary>View other notes</summary>
 
 **Repos:**
 
@@ -121,3 +129,5 @@ inputs:
   metadata: data/references_metadata.tsv
   sequences: data/references_sequences.fasta
 ```
+
+</details>
