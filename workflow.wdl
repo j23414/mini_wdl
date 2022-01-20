@@ -46,12 +46,16 @@ task mk_buildconfig {
   input {
     File sequence_fasta  # Could change this to Array[File] and loop the HEREDOC
     File metadata_tsv
+    String build = "example"
     String dockerImage
+    Int cpu = 1
+    Int disk_size = 5   # Pretty sure a cat command doesn't need much memory
+    Float memory = 3.5
   }
   command {
     cat << EOF > build.yaml
     inputs:
-    - name: example
+    - name: ~{build}
       metadata: ~{metadata_tsv}
       sequences: ~{sequence_fasta}
     - name: references
@@ -64,5 +68,8 @@ task mk_buildconfig {
   }
   runtime {
     docker: dockerImage
+    cpu : cpu
+    memory: memory + " GiB"
+    disks: "local-disk " + disk_size + " HDD"
   }
 }
