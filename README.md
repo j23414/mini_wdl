@@ -1,6 +1,6 @@
 # mini_wdl
 
-1. Go to the `mini_wdl` workflow from [Dockstore](https://dockstore.org/workflows/github.com/j23414/mini_wdl:archive_2022-01-19?tab=info)
+1. Go to the `mini_wdl` workflow from [Dockstore](https://dockstore.org/workflows/github.com/j23414/mini_wdl)
 2. Launch with "Terra" and add to your workspace
 3. Link the relevant inputs and hit "Run Analysis"
 
