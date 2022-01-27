@@ -1,6 +1,6 @@
 version 1.0
 
-# import "tasks/nextstrain.wdl" as nextstrain # Toggle on if switching to modular tasks
+# import "tasks/nextstrain.wdl" as nextstrain  # <= modular method
 
 workflow Nextstrain_WRKFLW {
   input {
@@ -33,7 +33,7 @@ workflow Nextstrain_WRKFLW {
     }
   }
 
-  # call nextstrain.nextstrain build as build {  # Toggle on if switching to modular
+  # call nextstrain.nextstrain build as build {  # <= modular method
   call nextstrain_build as build {
     input:
       build_yaml = select_first([build_yaml, mk_buildconfig.buildconfig]), # Accepts Option 1 or Option 2
@@ -50,7 +50,7 @@ workflow Nextstrain_WRKFLW {
   }
 }
 
-# === All tasks defined below, to simplify to one file.  Can also move tasks to "tasks/nextstrain.wdl"
+# === Define Tasks
 task mk_buildconfig {
   input {
     File sequence_fasta  # Could change this to Array[File] and loop the HEREDOC
@@ -58,7 +58,7 @@ task mk_buildconfig {
     String build = "example"
     String dockerImage
     Int cpu = 1
-    Int disk_size = 5   # Pretty sure a cat command doesn't need much memory
+    Int disk_size = 5
     Float memory = 3.5
   }
   command {
@@ -83,7 +83,7 @@ task mk_buildconfig {
   }
 }
 
-# Public Reference Datasets
+# Public Reference Datasets in case we want to add default "context" strains for ncov
 # nextstrain remote ls s3://nextstrain-data/files/ncov/open &> list.txt
 # files/ncov/open/LOCATION/metadata.tsv.xz where LOCATION = one of ['africa', 'asia', 'europe', 'global', 'north-america', 'oceania', 'south-america']
 # files/ncov/open/LOCATION/sequences.fasta.xz

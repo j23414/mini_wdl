@@ -1,6 +1,6 @@
-# mini_wdl
+# A WDL Pathogen Build
 
-1. Go to the `mini_wdl` workflow from [Dockstore](https://dockstore.org/workflows/github.com/j23414/mini_wdl)
+1. Go to the `wdl_pathogen_build` workflow from [Dockstore](https://dockstore.org/workflows/github.com/j23414/wdl_pathogen_build)
 2. Launch with "Terra" and add to your workspace
 3. Link the relevant inputs and hit "Run Analysis"
 
@@ -12,18 +12,10 @@ The native install seems to require Java 11. On macOS, installed `cromwell` via 
 
 ```
 brew install cromwell
+# Will also need to install and start Docker
 ```
 
-Run `Zika` tutorial
-
-```
-cromwell run workflow.wdl \
-  -i input_zika.json \
-  -o options.json \
-  &> log.txt
-```
-
-Run `ncov` tutorial
+Run the `ncov` tutorial:
 
 ```
 cromwell run workflow.wdl \
@@ -32,13 +24,24 @@ cromwell run workflow.wdl \
   &> log.txt
 ```
 
-Run `ncov` on your own `sequences.fasta` and `metadata.tsv`
+Run the `zika` tutorial:
 
 ```
 cromwell run workflow.wdl \
-  -i input_seqmet.json \
+  -i input_zika.json \
   -o options.json \
   &> log.txt
+```
+
+The local results will look like
+
+```
+results/
+  |_ wf_logs/
+  |_ call_logs/
+  |
+  |_ auspice.zip
+  |_ glob-XXXXX/*.json
 ```
 
 The Terra results will look like
@@ -52,18 +55,6 @@ cromwell-executions/
       |_ inputs/
       |_ execution/
         |_ auspice/      #<= here
-
-```
-
-The local results will look like
-
-```
-results/
-  |_ wf_logs/
-  |_ call_logs/
-  |
-  |_ auspice.zip
-  |_ glob-XXXXX/*.json
 ```
 
 ## Other Notes
