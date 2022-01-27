@@ -1,7 +1,6 @@
 version: 1.2
 workflows:
-   - name: wdl_pathogen_build
-     subclass: WDL
+   - subclass: WDL
      primaryDescriptorPath: /workflow.wdl
      testParameterFiles:
      - /input_ncov.json
