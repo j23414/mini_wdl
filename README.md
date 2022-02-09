@@ -9,6 +9,8 @@
 
 ![image of Terra inputs](data/screenshot.png)
 
+* Video Walk-through running analysis from Terra: https://youtu.be/qD0Eqc4eJRU
+
 ## Local Testing
 
 The native install seems to require Java 11. On macOS, installed `cromwell` via Homebrew ([ONT Installing Dependencies](https://dockstore.org/workflows/github.com/aryeelab/nanopore_tools/combine_sample_sheets:dev?tab=info), [Cromwell's 5 minute tutorial](https://cromwell.readthedocs.io/en/stable/tutorials/FiveMinuteIntro/))
