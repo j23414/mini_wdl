@@ -11,6 +11,7 @@ workflow Nextstrain_WRKFLW {
     File? sequence_fasta
     File? metadata_tsv
     String? build_name
+    # It's possible all of the above files are provided
 
     # Option 3? GISAID augur zip?
     # File? gisaid_zip

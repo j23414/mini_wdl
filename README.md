@@ -4,6 +4,8 @@
 2. Launch with "Terra" and add to your workspace
 3. Link the relevant inputs and hit "Run Analysis"
 
+* Upload files via https://app.terra.bio/#upload
+
 * Either connect a `sequence.fasta` and `metadata.tsv` file pair
 * Or connect a `build.yaml` where you can adjust sampling priorities or run multiple builds.
 
