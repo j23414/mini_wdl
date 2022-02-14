@@ -150,7 +150,7 @@ task nextstrain_build {
     # Run nextstrain
     "~{nextstrain_app}" build \
       --cpus $PROC \
-      --memory  ~{memory} \
+      --memory  ~{memory}Gib \
       --native $INDIR ~{"--configfile " + build_yaml} \
       ~{"--config active_builds=" + active_builds}
       
