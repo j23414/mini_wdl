@@ -73,7 +73,20 @@ task ncov_ingest {
           --printshellcmds
 
     # Okay, where does 47000 go?
+
+    # Or maybe simplier? https://github.com/nextstrain/ncov-ingest/blob/master/.github/workflows/rebuild-open.yml#L26
+    ./bin/rebuild open
+    ./bin/rebuild gisaid
+
+    # === prepare output
+    cd ..
+    zip -r ncov_ingest.zip ${NCOV_INGEST_DIR}
   >>>
+
+  output {
+    File ncov_ingest_zip = "ncov_ingest.zip"
+    # Separate this out into sequences, metadata files for both open and closed
+  }
   
   runtime {
     docker: docker_img
