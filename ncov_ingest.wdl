@@ -15,7 +15,7 @@ task ncov_ingest {
 
     String giturl = "https://github.com/nextstrain/ncov-ingest/archive/refs/heads/master.zip"
 
-    String? docker_img = "nextstrain/base:latest"
+    String? docker_img = "nextstrain/ncov-ingest:latest"
     Int cpu = 16
     Int disk_size = 48  # In GiB
     Float memory = 3.5
@@ -38,29 +38,20 @@ task ncov_ingest {
 
     PROC=`nproc` # Max out processors, although not sure if it matters here
 
-    # Um... well call the snakemake
+    # Navigate to ncov-ingest directory, and call snakemake
     cd ${NCOV_INGEST_DIR}
 
-    # Best guess from https://github.com/nextstrain/ncov-ingest/blob/master/.github/workflows/fetch-and-ingest-gisaid-master.yml#L43
-    ./bin/write-envdir env.d \
-      AWS_DEFAULT_REGION \
-      GISAID_API_ENDPOINT \
-      GISAID_USERNAME_AND_PASSWORD \
-      # GITHUB_RUN_ID \
-      # SLACK_TOKEN \
-      # SLACK_CHANNELS \
-      # PAT_GITHUB_DISPATCH
-
+    # Is this still required? Maybe for the --config flag later
     declare -a config
     config+=(
       fetch_from_database=True
       trigger_rebuild=True
     )
 
+    # Native run of snakemake?
     nextstrain build \
-      --aws-batch \
+      --native \
       --no-download \
-      --image nextstrain/ncov-ingest \
       --cpus ~{PROC} \
       --memory ~{memory}GiB \
       --exec env \
@@ -75,8 +66,8 @@ task ncov_ingest {
     # Okay, where does 47000 go?
 
     # Or maybe simplier? https://github.com/nextstrain/ncov-ingest/blob/master/.github/workflows/rebuild-open.yml#L26
-    ./bin/rebuild open
-    ./bin/rebuild gisaid
+    #./bin/rebuild open       # Make sure these aren't calling aws before using them
+    #./bin/rebuild gisaid
 
     # === prepare output
     cd ..
