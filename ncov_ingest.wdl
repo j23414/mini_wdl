@@ -41,7 +41,7 @@ task ncov_ingest {
     # Navigate to ncov-ingest directory, and call snakemake
     cd ${NCOV_INGEST_DIR}
 
-    # Is this still required? Maybe for the --config flag later
+    # Still required for the --config flag later?
     declare -a config
     config+=(
       fetch_from_database=True
@@ -56,14 +56,14 @@ task ncov_ingest {
       --memory ~{memory}GiB \
       --exec env \
       . \
-        envdir env.d snakemake \
+        snakemake \
           --configfile config/gisaid.yaml \
           --config "${config[@]}" \
           --cores ${PROC} \
           --resources mem_mb=47000 \
           --printshellcmds
 
-    # Okay, where does 47000 go?
+    # Okay, where does this 47000 go?
 
     # Or maybe simplier? https://github.com/nextstrain/ncov-ingest/blob/master/.github/workflows/rebuild-open.yml#L26
     #./bin/rebuild open       # Make sure these aren't calling aws before using them

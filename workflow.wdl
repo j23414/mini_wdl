@@ -1,6 +1,6 @@
 version 1.0
 
-# import "tasks/nextstrain.wdl" as nextstrain  # <= modular method
+# import "tasks/nextstrain.wdl" as nextstrain # <= modular method
 
 workflow Nextstrain_WRKFLW {
   input {
