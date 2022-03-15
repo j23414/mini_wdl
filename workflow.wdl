@@ -2,13 +2,15 @@ version 1.0
 
 # import "tasks/nextstrain.wdl" as nextstrain # <= modular method
 import "tasks/buildfile.wdl" as buildfile
-import "tasks/version1.wdl" as nextstrain
-#import "tasks/version2.wdl" as nextstrain  # <= swap versions
+#import "tasks/version1.wdl" as nextstrain
+import "tasks/version2.wdl" as nextstrain  # <= swap versions
 
 workflow Nextstrain_WRKFLW {
   input {
     # Option 1: run the ncov example workflow
     File? build_yaml
+    # Option 1b: add custom profiles
+    File custom_zip
 
     # Option 2: create a build_yaml from sequence and metadata
     File? sequence_fasta
@@ -43,6 +45,7 @@ workflow Nextstrain_WRKFLW {
   call nextstrain.nextstrain_build as build {
     input:
       build_yaml = select_first([build_yaml, mk_buildconfig.buildconfig]), # Accepts Option 1 or Option 2
+      custom_zip = custom_zip,
       cpu = cpu,
       memory = memory,
       disk_size = disk_size,
