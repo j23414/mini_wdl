@@ -20,8 +20,9 @@ task nextstrain_build {
     unzip master.zip  
 
     # Link custom profile (zipped version)
-    CUSTOM_DIR=`unzip -Z ~{custom_zip} | head -n1 | sed 's:/::g'`
-    unzip ~{custom_zip}
+    mv ~{custom_zip} here_custom.zip
+    CUSTOM_DIR=`unzip -Z here_custom.zip | head -n1 | sed 's:/::g'`
+    unzip here_custom.zip
     cp -r $CUSTOM_DIR/*_profile $INDIR/.
     BUILDYAML=`ls -1 $CUSTOM_DIR/*.yaml | head -n1`
     
