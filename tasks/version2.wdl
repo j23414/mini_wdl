@@ -20,11 +20,12 @@ task nextstrain_build {
     unzip master.zip  
 
     # Link custom profile (zipped version)
-    mv ~{custom_zip} here_custom.zip
-    CUSTOM_DIR=`unzip -Z here_custom.zip | head -n1 | sed 's:/::g'`
+    cp ~{custom_zip} here_custom.zip
+    CUSTOM_DIR=`unzip -Z1 here_custom.zip | head -n1 | sed 's:/::g'`
     unzip here_custom.zip
     cp -r $CUSTOM_DIR/*_profile $INDIR/.
     BUILDYAML=`ls -1 $CUSTOM_DIR/*.yaml | head -n1`
+    cp $BUILDYAML $INDIR/build_custom.yaml
     
     # Max out the number of threads
     PROC=`nproc`  
@@ -34,7 +35,7 @@ task nextstrain_build {
       --cpus $PROC \
       --memory  ~{memory}Gib \
       --native $INDIR \
-      --configfile $BUILDYAML \
+      --configfile build_custom.yaml \
       ~{"--config active_builds=" + active_builds}
     
     # --native $INDIR ~{"--configfile " + build_yaml} \
