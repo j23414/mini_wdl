@@ -24,8 +24,10 @@ task nextstrain_build {
     CUSTOM_DIR=`unzip -Z1 here_custom.zip | head -n1 | sed 's:/::g'`
     unzip here_custom.zip
     cp -r $CUSTOM_DIR/*_profile $INDIR/.
-    BUILDYAML=`ls -1 $CUSTOM_DIR/*.yaml | head -n1`
-    cp $BUILDYAML $INDIR/build_custom.yaml
+
+    # Draft: if passing build file from zip folder
+    # BUILDYAML=`ls -1 $CUSTOM_DIR/*.yaml | head -n1`
+    # cp $BUILDYAML $INDIR/build_custom.yaml # --config build_custom.yaml
     
     # Max out the number of threads
     PROC=`nproc`  
@@ -34,11 +36,8 @@ task nextstrain_build {
     "~{nextstrain_app}" build \
       --cpus $PROC \
       --memory  ~{memory}Gib \
-      --native $INDIR \
-      --configfile build_custom.yaml \
+      --native $INDIR ~{"--configfile " + build_yaml} \
       ~{"--config active_builds=" + active_builds}
-    
-    # --native $INDIR ~{"--configfile " + build_yaml} \
       
     # Prepare output
     mv $INDIR/auspice .
