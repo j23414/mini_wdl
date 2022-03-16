@@ -3,7 +3,8 @@ version 1.0
 # import "tasks/nextstrain.wdl" as nextstrain # <= modular method
 import "tasks/buildfile.wdl" as buildfile
 #import "tasks/version1.wdl" as nextstrain
-import "tasks/version2.wdl" as nextstrain  # <= swap versions
+#import "tasks/version2.wdl" as nextstrain  # <= swap versions
+import "tasks/s3.wdl" as nextstrain
 
 workflow Nextstrain_WRKFLW {
   input {
@@ -11,6 +12,9 @@ workflow Nextstrain_WRKFLW {
     File? build_yaml
     # Option 1b: add custom profiles
     File custom_zip
+    # Pass in AWS KEYS (required!)
+    String AWS_ACCESS_KEY_ID
+    String AWS_SECRET_ACCESS_KEY
 
     # Option 2: create a build_yaml from sequence and metadata
     File? sequence_fasta
@@ -51,7 +55,9 @@ workflow Nextstrain_WRKFLW {
       disk_size = disk_size,
       dockerImage = docker_path,
       giturl = giturl,
-      active_builds = active_builds
+      active_builds = active_builds,
+      AWS_ACCESS_KEY_ID = AWS_ACCESS_KEY_ID,
+      AWS_SECRET_ACCESS_KEY = AWS_SECRET_ACCESS_KEY
   }
 
   output {

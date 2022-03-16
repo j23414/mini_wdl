@@ -5,10 +5,16 @@ task nextstrain_build {
     File? build_yaml
     File custom_zip # <= since custom is private
     String? active_builds # Wisconsin,Minnesota,Washington
+
+    String AWS_ACCESS_KEY_ID
+    String AWS_SECRET_ACCESS_KEY
+    String s3deploy = "s3://nextstrain-staging/"
+    
     String dockerImage = "nextstrain/base:latest"
     String nextstrain_app = "nextstrain"
     String giturl = "https://github.com/nextstrain/ncov/archive/refs/heads/master.zip"
     # String? custom_url = "path to public github"  # Our custom config files are private
+
     Int cpu = 8         # Honestly, I'd max this out unless budget is a consideration.
     Int disk_size = 30  # In GiB.  Could also check size of sequence or metadata files
     Float memory = 3.5 
@@ -38,6 +44,15 @@ task nextstrain_build {
       --memory  ~{memory}Gib \
       --native $INDIR ~{"--configfile " + build_yaml} \
       ~{"--config active_builds=" + active_builds}
+
+    # s3 deploy
+    export AWS_ACCESS_KEY_ID=~{AWS_ACCESS_KEY_ID}
+    export AWS_SECRET_ACCESS_KEY=~{AWS_SECRET_ACCESS_KEY}
+    
+    # Upload the first json file to staging
+    BUILD_JSON=`ls -1 $INDIR/auspice | head -n1`
+    echo $BUILD_JSON
+    nextstrain deploy ~{s3deploy} $INDIR/auspice/$BUILD_JSON
       
     # Prepare output
     mv $INDIR/auspice .
