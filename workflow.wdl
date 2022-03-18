@@ -61,7 +61,8 @@ workflow Nextstrain_WRKFLW {
   }
 
   output {
-    Array[File] json_files = build.json_files
+    #Array[File] json_files = build.json_files
     File auspice_zip = build.auspice_zip
+    File results_zip = build.results_zip
   }
 }
