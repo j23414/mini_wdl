@@ -49,10 +49,8 @@ task nextstrain_build {
     export AWS_ACCESS_KEY_ID=~{AWS_ACCESS_KEY_ID}
     export AWS_SECRET_ACCESS_KEY=~{AWS_SECRET_ACCESS_KEY}
     
-    # Upload the first json file to staging
-    BUILD_JSON=`ls -1 $INDIR/auspice | head -n1`
-    echo $BUILD_JSON
-    nextstrain deploy ~{s3deploy} $INDIR/auspice/$BUILD_JSON
+    # Upload all json files to staging, maybe check for filename collisions
+    nextstrain deploy ~{s3deploy} $INDIR/auspice/*.json
       
     # Prepare output
     mv $INDIR/auspice .
