@@ -15,7 +15,7 @@ task nextstrain_build {
     String giturl = "https://github.com/nextstrain/ncov/archive/refs/heads/master.zip"
     # String? custom_url = "path to public github"  # Our custom config files are private
 
-    Int cpu = 8         # Honestly, I'd max this out unless budget is a consideration.
+    Int cpu = 8
     Int disk_size = 30  # In GiB.  Could also check size of sequence or metadata files
     Float memory = 3.5 
   }
@@ -33,7 +33,7 @@ task nextstrain_build {
 
     # Draft: if passing build file from zip folder
     # BUILDYAML=`ls -1 $CUSTOM_DIR/*.yaml | head -n1`
-    # cp $BUILDYAML $INDIR/build_custom.yaml # --config build_custom.yaml
+    # cp $BUILDYAML $INDIR/build_custom.yaml
     
     # Max out the number of threads
     PROC=`nproc`  
@@ -55,11 +55,15 @@ task nextstrain_build {
     # Prepare output
     mv $INDIR/auspice .
     zip -r auspice.zip auspice
+    
+    # For debugging
+    mv $INDIR/results .
+    cp $INDIR/.snakemake/log/*.log results/.
+    zip -r results.zip results
   }
   output {
-    File auspice_zip = "auspice.zip"
-    Array[File] json_files = glob("auspice/*.json")
-    # Target the s3
+    File auspice_zip = "auspice.zip"  # json files for auspice
+    File results_zip = "results.zip"  # for debugging
   }
   runtime {
     docker: dockerImage
