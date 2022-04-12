@@ -11,7 +11,7 @@ workflow Nextstrain_WRKFLW {
     # Option 1: run the ncov example workflow
     File? build_yaml
     # Option 1b: add custom profiles
-    File custom_zip
+    File? custom_zip
     # Pass in AWS KEYS (required!)
     String AWS_ACCESS_KEY_ID
     String AWS_SECRET_ACCESS_KEY

@@ -3,7 +3,7 @@ version 1.0
 task nextstrain_build {
   input {
     File? build_yaml
-    File custom_zip # <= since custom is private
+    File? custom_zip # <= since custom is private
     String? active_builds # Wisconsin,Minnesota,Washington
 
     String AWS_ACCESS_KEY_ID
@@ -25,11 +25,14 @@ task nextstrain_build {
     INDIR=`unzip -Z1 master.zip | head -n1 | sed 's:/::g'`
     unzip master.zip  
 
-    # Link custom profile (zipped version)
-    cp ~{custom_zip} here_custom.zip
-    CUSTOM_DIR=`unzip -Z1 here_custom.zip | head -n1 | sed 's:/::g'`
-    unzip here_custom.zip
-    cp -r $CUSTOM_DIR/*_profile $INDIR/.
+    if [ -n "~{custom_zip}"]
+    then
+      # Link custom profile (zipped version)
+      cp ~{custom_zip} here_custom.zip
+      CUSTOM_DIR=`unzip -Z1 here_custom.zip | head -n1 | sed 's:/::g'`
+      unzip here_custom.zip
+      cp -r $CUSTOM_DIR/*_profile $INDIR/.
+    fi
 
     # Draft: if passing build file from zip folder
     # BUILDYAML=`ls -1 $CUSTOM_DIR/*.yaml | head -n1`
