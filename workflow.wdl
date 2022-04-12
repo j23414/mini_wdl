@@ -17,8 +17,8 @@ workflow Nextstrain_WRKFLW {
     String AWS_SECRET_ACCESS_KEY
 
     # Option 2: create a build_yaml from sequence and metadata
-    File? sequence_fasta
-    File? metadata_tsv
+    String? sequence_fasta
+    String? metadata_tsv
     String? build_name
     # It's possible all of the above files are provided
 
@@ -28,8 +28,8 @@ workflow Nextstrain_WRKFLW {
     String? active_builds # "Wisconsin,Minnesota,Iowa"
 
     # By default, run the ncov workflow (can swap it for zika or something else)
-    String giturl = "https://github.com/nextstrain/ncov/archive/refs/heads/master.zip"
-    String docker_path = "nextstrain/base:latest"
+    String pathogen_giturl = "https://github.com/nextstrain/ncov/archive/refs/heads/master.zip"
+    String docker_path = "nextstrain/base:branch-add-google-cloud-storage"
     Int? cpu
     Int? memory       # in GiB
     Int? disk_size
@@ -54,7 +54,7 @@ workflow Nextstrain_WRKFLW {
       memory = memory,
       disk_size = disk_size,
       dockerImage = docker_path,
-      giturl = giturl,
+      pathogen_giturl = pathogen_giturl,
       active_builds = active_builds,
       AWS_ACCESS_KEY_ID = AWS_ACCESS_KEY_ID,
       AWS_SECRET_ACCESS_KEY = AWS_SECRET_ACCESS_KEY

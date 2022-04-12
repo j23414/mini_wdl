@@ -11,8 +11,7 @@ task nextstrain_build {
     String s3deploy = "s3://nextstrain-staging/"
     
     String dockerImage = "nextstrain/base:latest"
-    String nextstrain_app = "nextstrain"
-    String giturl = "https://github.com/nextstrain/ncov/archive/refs/heads/master.zip"
+    String pathogen_giturl = "https://github.com/nextstrain/ncov/archive/refs/heads/master.zip"
     # String? custom_url = "path to public github"  # Our custom config files are private
 
     Int cpu = 8
@@ -20,12 +19,15 @@ task nextstrain_build {
     Float memory = 3.5 
   }
   command {
+    set -v
+
     # Pull ncov, zika or similar repository
-    wget -O master.zip ~{giturl}
+    wget -O master.zip ~{pathogen_giturl}
     INDIR=`unzip -Z1 master.zip | head -n1 | sed 's:/::g'`
     unzip master.zip  
 
-    if [ -n "~{custom_zip}"]
+    echo "~{custom_zip}"
+    if [ -n "~{custom_zip}" ]
     then
       # Link custom profile (zipped version)
       cp ~{custom_zip} here_custom.zip
@@ -42,7 +44,7 @@ task nextstrain_build {
     PROC=`nproc`  
 
     # Run nextstrain
-    "~{nextstrain_app}" build \
+    nextstrain build \
       --cpus $PROC \
       --memory  ~{memory}Gib \
       --native $INDIR ~{"--configfile " + build_yaml} \

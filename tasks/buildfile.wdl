@@ -2,8 +2,8 @@ version 1.0
 
 task mk_buildconfig {
   input {
-    File sequence_fasta  # Could change this to Array[File] and loop the HEREDOC
-    File metadata_tsv
+    String sequence_fasta  # Could change this to Array[File] and loop the HEREDOC
+    String metadata_tsv
     String build = "example"
     String dockerImage
     Int cpu = 1
