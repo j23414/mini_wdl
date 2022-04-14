@@ -2,13 +2,16 @@ version 1.0
 
 task nextstrain_build {
   input {
+    File? sequence_fasta
+    File? metadata_tsv
+
     File? build_yaml
-    File? custom_zip # <= since custom is private
+    File? custom_zip      # <= since custom is private
     String? active_builds # Wisconsin,Minnesota,Washington
 
-    String AWS_ACCESS_KEY_ID
-    String AWS_SECRET_ACCESS_KEY
-    String s3deploy = "s3://nextstrain-staging/"
+    String? AWS_ACCESS_KEY_ID
+    String? AWS_SECRET_ACCESS_KEY
+    String? s3deploy      # "s3://nextstrain-staging/"
     
     String dockerImage = "nextstrain/base:latest"
     String pathogen_giturl = "https://github.com/nextstrain/ncov/archive/refs/heads/master.zip"
@@ -18,15 +21,19 @@ task nextstrain_build {
     Int disk_size = 30  # In GiB.  Could also check size of sequence or metadata files
     Float memory = 3.5 
   }
-  command {
-    set -v
-
-    # Pull ncov, zika or similar repository
+  command <<<
+    
+    # Pull ncov, zika or similar pathogen repo
     wget -O master.zip ~{pathogen_giturl}
     INDIR=`unzip -Z1 master.zip | head -n1 | sed 's:/::g'`
     unzip master.zip  
 
-    echo "~{custom_zip}"
+    if [ -n "~{sequence_fasta}" ]
+    then
+      mv ~{sequence_fasta} $INDIR/.
+      mv ~{metadata_tsv} $INDIR/.
+    fi
+
     if [ -n "~{custom_zip}" ]
     then
       # Link custom profile (zipped version)
@@ -50,12 +57,15 @@ task nextstrain_build {
       --native $INDIR ~{"--configfile " + build_yaml} \
       ~{"--config active_builds=" + active_builds}
 
-    # s3 deploy
-    export AWS_ACCESS_KEY_ID=~{AWS_ACCESS_KEY_ID}
-    export AWS_SECRET_ACCESS_KEY=~{AWS_SECRET_ACCESS_KEY}
-    
-    # Upload all json files to staging, maybe check for filename collisions
-    nextstrain deploy ~{s3deploy} $INDIR/auspice/*.json
+    if [ -n "~{s3deploy}" ]
+    then
+      # s3 deploy
+      export AWS_ACCESS_KEY_ID=~{AWS_ACCESS_KEY_ID}
+      export AWS_SECRET_ACCESS_KEY=~{AWS_SECRET_ACCESS_KEY}
+      
+      # Upload all json files to staging, maybe check for filename collisions
+      nextstrain deploy ~{s3deploy} $INDIR/auspice/*.json
+    fi
       
     # Prepare output
     mv $INDIR/auspice .
@@ -65,7 +75,7 @@ task nextstrain_build {
     mv $INDIR/results .
     cp $INDIR/.snakemake/log/*.log results/.
     zip -r results.zip results
-  }
+  >>>
   output {
     File auspice_zip = "auspice.zip"  # json files for auspice
     File results_zip = "results.zip"  # for debugging

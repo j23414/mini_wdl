@@ -2,25 +2,25 @@ version 1.0
 
 task mk_buildconfig {
   input {
-    String sequence_fasta  # Could change this to Array[File] and loop the HEREDOC
-    String metadata_tsv
+    File sequence_fasta  # Could change this to Array[File] and loop the HEREDOC
+    File metadata_tsv
     String build = "example"
-    String dockerImage
+    String dockerImage = "nextstrain/base:latest"
     Int cpu = 1
     Int disk_size = 5
     Float memory = 3.5
   }
-  command {
+  command <<<
     cat << EOF > build.yaml
     inputs:
     - name: ~{build}
-      metadata: ~{metadata_tsv}
-      sequences: ~{sequence_fasta}
+      metadata: ~{basename(metadata_tsv)}
+      sequences: ~{basename(sequence_fasta)}
     - name: references
       metadata: data/references_metadata.tsv
       sequences: data/references_sequences.fasta
     EOF
-  }
+  >>>
   output {
     File buildconfig = "build.yaml"
   }

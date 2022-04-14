@@ -63,8 +63,6 @@ task ncov_ingest {
           --resources mem_mb=47000 \
           --printshellcmds
 
-    # Okay, where does this 47000 go?
-
     # Or maybe simplier? https://github.com/nextstrain/ncov-ingest/blob/master/.github/workflows/rebuild-open.yml#L26
     #./bin/rebuild open       # Make sure these aren't calling aws before using them
     #./bin/rebuild gisaid
