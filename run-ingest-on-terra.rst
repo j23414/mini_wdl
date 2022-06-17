@@ -56,8 +56,6 @@ III. Connect your workspace variables to the wdl ingest workflow
   +-----------------+------------------+-------+----------------------------------+
   |Nextstrain_WRKFLW|  metadata_tsv    | File  | workspace.gisaid_metadata_tsv    |
   +-----------------+------------------+-------+----------------------------------+
-  |Nextstrain_WRKFLW|  aligned_fasta   | File  | workspace.gisaid_aligned_fasta   |
-  +-----------------+------------------+-------+----------------------------------+
   |Nextstrain_WRKFLW|  nextclade_tsv   | File  | workspace.gisaid_nextclade_tsv   |
   +-----------------+------------------+-------+----------------------------------+
 
