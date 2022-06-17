@@ -141,6 +141,7 @@ task genbank_ingest {
     unzip master.zip
 
     # Link cache files, instead of pulling from s3
+    touch ${NCOV_INGEST_DIR}/data/genbank/nextclade_old.tsv
     if [ -n "~{cache_nextclade_old}" ]
     then
       mv ~{cache_nextclade_old} ${NCOV_INGEST_DIR}/data/genbank/nextclade_old.tsv
