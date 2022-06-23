@@ -1,5 +1,18 @@
 # A WDL Pathogen Build
 
+## Testing
+
+With modified https://github.com/nextstrain/ncov-ingest/archive/refs/heads/modularize_upload.zip
+
+| Dataset | ncov-ingest | ncov |
+|:--|:--|:--|
+|GISAID| [code](https://github.com/nextstrain/ncov/blob/wdl/temp_ingest/workflow/wdl/tasks/ncov_ingest.wdl#L5); 6hr 47m; $5.67; [job](https://job-manager.dsde-prod.broadinstitute.org/jobs/aaa461da-a5ad-4b16-a340-f618a0fa14ec)| [gisaid_builds.yaml](data/gisaid_builds.yaml); 5hr 21m; $5.55; [job](https://app.terra.bio/#workspaces/Nextstrain/Development/job_history/de1defe7-a361-4487-b44f-3d946e5fa40b)|
+|GenBank| | [genbank_build.yaml](data/genbank_build.yaml)|
+
+---
+
+## Scrap
+
 1. Go to the `wdl_pathogen_build` workflow from [Dockstore](https://dockstore.org/workflows/github.com/j23414/wdl_pathogen_build)
 2. Launch with "Terra" and add to your workspace
 3. Link the relevant inputs and hit "Run Analysis"
