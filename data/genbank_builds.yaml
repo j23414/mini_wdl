@@ -1,0 +1,51 @@
+auspice_json_prefix: ncov_open
+
+## Define custom rules for pre- or post-standard workflow processing of data.
+#custom_rules:
+#  - workflow/snakemake_rules/export_for_nextstrain.smk
+
+genes: ["ORF1a", "ORF1b", "S", "ORF3a", "E", "M", "ORF6", "ORF7a", "ORF7b", "ORF8", "N", "ORF9b"]
+use_nextalign: true
+include_hcov19_prefix: False
+
+files:
+  description: "nextstrain_profiles/nextstrain-open/nextstrain_description.md"
+
+# Note: unaligned sequences are provided as "aligned" sequences to avoid an initial full-DB alignment
+# as we re-align everything after subsampling.
+inputs:
+  - name: open
+    metadata: "metadata.tsv"
+    aligned: "sequences.fasta"
+    skip_sanitize_metadata: true
+
+# Define locations for which builds should be created.
+# For each build we specify a subsampling scheme via an explicit key.
+# These subsampling schemes are defined at the bottom of this file.
+# (They override the defaults)
+# North America and Oceania are subsampled at the "division" level
+# Africa, Asia, Europe and South America are subsampled at the "country" level
+#
+# Auspice config is specified in rule auspice_config in export_for_nextstrain.smk
+builds:
+  reference:
+    subsampling_scheme: nextstrain_reference
+    title: Genomic epidemiology of SARS-CoV-2 with clade-focused subsampling
+
+# remove sequences without division label in US
+filter:
+  exclude_where: "division='USA'"
+
+subsampling:
+
+  # Custom subsampling logic for group by clade
+  nextstrain_reference:
+    clades:
+      group_by: "Nextstrain_clade"
+      max_sequences: 300
+
+# GenBank data includes "Wuhan-Hu-1/2019" which we use as the root for this build
+# as Wuhan/Hu-1/2019 is not in the data.
+refine:
+  root: "Wuhan-Hu-1/2019"
+
