@@ -7,7 +7,7 @@ With modified https://github.com/nextstrain/ncov-ingest/archive/refs/heads/modul
 | Dataset | ncov-ingest | ncov | s3 deploy |
 |:--|:--|:--|:--|
 |GISAID| [code](https://github.com/nextstrain/ncov/blob/wdl/temp_ingest/workflow/wdl/tasks/ncov_ingest.wdl#L5); 6hr 47m; $5.67; [job](https://job-manager.dsde-prod.broadinstitute.org/jobs/aaa461da-a5ad-4b16-a340-f618a0fa14ec) <br> no cache; 75hr 19m; $62.91; [job](https://app.terra.bio/#workspaces/Nextstrain/Development/job_history/624ba3c2-14c6-4c1b-8666-95cb43cf93ed) | [gisaid_builds.yaml](data/gisaid_builds.yaml); 2hr 1m; $2.08; [job](https://app.terra.bio/#workspaces/Nextstrain/Development/job_history/98703872-2650-4b8a-811c-9cc0d8c79376)| [view build](https://next.nextstrain.org/fetch/nextstrain-staging.s3.amazonaws.com/terra_test/ncov_gisaid_reference.json) |
-|GenBank| [code](https://github.com/j23414/wdl_pathogen_build/blob/ingest/tasks/ncov_ingest.wdl#L119); 43hr 22m; $21.30; [job](https://app.terra.bio/#workspaces/Nextstrain/Development/job_history/5f1c3cb7-97c9-4e68-b014-726474c900ef) | [genbank_builds.yaml](data/genbank_builds.yaml)| |
+|GenBank| [code](https://github.com/j23414/wdl_pathogen_build/blob/ingest/tasks/ncov_ingest.wdl#L119); 43hr 22m; $21.30; [job](https://app.terra.bio/#workspaces/Nextstrain/Development/job_history/5f1c3cb7-97c9-4e68-b014-726474c900ef) | [genbank_builds.yaml](data/genbank_builds.yaml); 51m; [job](https://app.terra.bio/#workspaces/Nextstrain/Development/job_history/9bc2a962-bb3a-4453-a0aa-34914a9f4759) | [view build](https://next.nextstrain.org/staging/terrancov/open/reference) |
 
 ## Overview of pipeline
 
