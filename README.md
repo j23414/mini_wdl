@@ -10,3 +10,4 @@ This branch is for testing basic Terra task I/O before adding it to the main pat
 
 * [Dockstore: j23414/wdl\_pathogen\_build:zzz\_min](https://dockstore.org/workflows/github.com/j23414/wdl_pathogen_build:zzz_min?tab=info)
 * [Terra Documentation: execute!](https://support.terra.bio/hc/en-us/articles/360037487871-Execute-)
+* [FireCloud: Terra Workflows Quickstart](https://firecloud.terra.bio/#workspaces/fc-product-demo/Terra-Workflows-Quickstart)
