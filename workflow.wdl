@@ -5,6 +5,8 @@ version 1.0
 # === Customized Object
 struct My_Object {
   Int value
+  String name
+  String? maybe_text
 }
 
 # === Define individual tasks
@@ -12,6 +14,15 @@ struct My_Object {
 # Can be defined later in the file (order doesn't matter?)
 
 task wdl_task {
+  meta {
+    author: "Jane Doe"
+  }
+  parameter_meta {
+    # These parameters will be required, no optionals?
+    a_truth: "Either true or false"
+    a_file: "A tsv file for the example"
+    maybe_truth: "this is an optional test"
+  }
   input {
     # Primitives
     Boolean a_truth = true
@@ -20,13 +31,15 @@ task wdl_task {
     Float a_float = 1.111
 
     # Conditionals - (boolean = defined(conditional_var) or conditional_var == None or !=)
-    String? maybe_string = "hope"
+    String? maybe_string
     File? maybe_file
-    # Float? maybe_float = 1.111
+    Boolean? maybe_truth
     # File? maybe_file
 
     # Files or Directories
     File a_file
+    String file_base = basename(a_file)
+    String file_stripped = basename(a_file, ".tsv")
     # Directory a_directory # NOPE, still no directories on Terra
     Array[File] some_files = [ a_file ]
 
@@ -35,7 +48,7 @@ task wdl_task {
     Pair[Int, String] a_pair = (1, "abc")
 
     # Customized struct
-    My_Object custom_obj = object { value:111 }
+    My_Object custom_obj = object { value:111, name:"bill" }
 
     # # Collections - String newvar = if length(collection_var) > 0 then xxx else xxx
     # Array[Boolean] group_truth = [ true, false ]
@@ -63,12 +76,16 @@ task wdl_task {
     echo -e ""
   
     echo -e "===== Optionals"
-    echo -e "String?\tmaybe_string\t~{maybe_string}"
-    echo -e "File?\tmaybe_file~{maybe_file}"
+    echo -e "String?\tmaybe_string\t~{default='empty' maybe_string}"
+    echo -e "File?\tmaybe_file\t~{maybe_file}"
+    echo -e "Boolean?\tmaybe_truth\t~{default='false' maybe_truth}"
     echo -e ""
   
     echo -e "====== Files/Directories"
-    echo -e "~{a_file}"
+    echo -e "File: ~{a_file}"
+    echo -e "Basename: ~{basename(a_file)}"
+    echo -e "Basename: ~{file_base}"
+    echo -e "Stripped: ~{file_stripped}"
     echo -e ""
   
     echo -e "====== Collections"  
@@ -78,7 +95,7 @@ task wdl_task {
     echo -e ""
   
     echo -e "====== Custom Objects"
-    echo -e "My_Object\tcustom_obj\t~{custom_obj.value}"
+    echo -e "My_Object\tcustom_obj\t~{custom_obj.value}\t~{custom_obj.name}\t~{default='empty' custom_obj.maybe_text}"
     
     touch a.txt b.txt c.txt
     env > env.txt
