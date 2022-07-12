@@ -167,6 +167,60 @@ task gather_step {
   }
 }
 
+task xz_task {
+  input{
+    File infile
+
+    # Required
+    String docker_img = "nextstrain/base:latest"
+    Int? cpu
+    Int? memory       # in GiB
+    Int disk_size = ceil(size(infile, "GB") * 2 + 1)
+  }
+  command<<<
+    xz --version
+    time xz -v ~{infile}
+    ls -ltrh
+  >>>
+  output {
+    Array[File] outfiles = glob("*")
+  }
+
+  runtime {
+    docker : docker_img
+    cpu : select_first([cpu, 16])
+    memory: select_first([memory, 50]) + " GiB"
+    disks: "local-disk " + disk_size + " HDD"
+  }
+}
+
+task zstd_task {
+  input{
+    File infile
+
+    # Required
+    String docker_img = "nextstrain/base:latest"
+    Int? cpu
+    Int? memory       # in GiB
+    Int disk_size = ceil(size(infile, "GB") * 2 + 1)
+  }
+  command<<<
+    zstd --version
+    time zstd ~{infile}
+    ls -ltrh
+  >>>
+  output {
+    Array[File] outfiles = glob("*")
+  }
+
+  runtime {
+    docker : docker_img
+    cpu : select_first([cpu, 16])
+    memory: select_first([memory, 50]) + " GiB"
+    disks: "local-disk " + disk_size + " HDD"
+  }
+}
+
 # === Link tasks in a workflow
 workflow WRKFLW {
   input {
@@ -179,6 +233,8 @@ workflow WRKFLW {
     File a_file
 
     Array[String] some_strings=["a", "b", "c"]
+
+    File? large_file
 
     # Required
     String docker_img = "nextstrain/base:latest"
@@ -207,11 +263,19 @@ workflow WRKFLW {
   }
   call gather_step { input: ins=parallel_step.stdout }
 
+  if ( defined(large_file) ) {
+    call xz_task { input: infile= select_first([large_file])}
+    call zstd_task { input: infile= select_first([large_file])}
+  }
+
   output {
     Array[File] outputs = wdl_task.outputs
     File env = wdl_task.env
     File text = wdl_task.text
     String stdout_str = wdl_task.stdout_str
     String gather_echo = gather_step.stdout
+
+    Array[File]? xz_out = xz_task.outfiles
+    Array[File]? zstd_out = zstd_task.outfiles
   }
 }
