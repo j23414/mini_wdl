@@ -221,6 +221,37 @@ task zstd_task {
   }
 }
 
+task looper {
+  input {
+    File? infile
+
+    # Required
+    String docker_img = "nextstrain/base:latest"
+    Int? cpu
+    Int? memory       # in GiB
+    Int disk_size = ceil(size(infile, "GB") * 2 + 1)
+
+  }
+  command <<<
+  touch outfile.txt
+  if [[ -n "~{infile}" ]]; then
+    cat ~{infile} >> outfile.txt
+  fi
+
+  echo "looper: " `date` &>> outfile.txt
+  >>>
+  output {
+    File outfile = "outfile.txt"
+  }
+  runtime {
+    docker : docker_img
+    cpu : select_first([cpu, 16])
+    memory: select_first([memory, 50]) + " GiB"
+    disks: "local-disk " + disk_size + " HDD"
+  }
+
+}
+
 # === Link tasks in a workflow
 workflow WRKFLW {
   input {
@@ -268,6 +299,10 @@ workflow WRKFLW {
     call zstd_task { input: infile= select_first([large_file])}
   }
 
+  call looper as loop1
+  call looper as loop2 { input: infile=loop1.outfile }
+  call looper as loop3 { input: infile=loop2.outfile }
+
   output {
     Array[File] outputs = wdl_task.outputs
     File env = wdl_task.env
@@ -277,5 +312,6 @@ workflow WRKFLW {
 
     Array[File]? xz_out = xz_task.outfiles
     Array[File]? zstd_out = zstd_task.outfiles
+    File looped = loop3.outfile
   }
 }
