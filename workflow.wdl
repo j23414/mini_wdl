@@ -252,6 +252,35 @@ task looper {
 
 }
 
+# Race
+
+task running_man {
+  input {
+    String? in_str
+    String text = "running man"
+    Int speed = 1
+
+    # Required
+    String docker_img = "nextstrain/base:latest"
+    Int? cpu
+    Int? memory       # in GiB
+    Int disk_size = 5
+  }
+  command <<<
+    sleep ~{speed}
+    echo "~{in_str} ~{text}"
+  >>>
+  output {
+    String out_str = read_string(stdout())
+  }
+  runtime {
+    docker : docker_img
+    cpu : select_first([cpu, 16])
+    memory: select_first([memory, 50]) + " GiB"
+    disks: "local-disk " + disk_size + " HDD"
+  }
+}
+
 # === Link tasks in a workflow
 workflow WRKFLW {
   input {
@@ -303,6 +332,9 @@ workflow WRKFLW {
   call looper as loop2 { input: infile=loop1.outfile }
   call looper as loop3 { input: infile=loop2.outfile }
 
+  call running_man as Bill { input: in_str="", text="Bill won!", speed = 1}
+  call running_man as Jim { input: in_str="", text="Jim won!", speed = 10}
+
   output {
     Array[File] outputs = wdl_task.outputs
     File env = wdl_task.env
@@ -313,5 +345,10 @@ workflow WRKFLW {
     Array[File]? xz_out = xz_task.outfiles
     Array[File]? zstd_out = zstd_task.outfiles
     File looped = loop3.outfile
+
+    # force collision here by connecting to same workspace
+    String bill_out = Bill.out_str
+    String jim_out = Jim.out_str
+
   }
 }
