@@ -281,6 +281,73 @@ task running_man {
   }
 }
 
+task get_stats {
+  input {
+    File fasta_xz
+    File metadata_xz
+
+    String filter = "region:Africa"
+
+    String fasta = basename(fasta_xz, ".xz")
+    String metadata = basename(metadata_xz, ".xz")
+
+    String docker_img = "nextstrain/ncov-ingest:latest"
+    Int? cpu
+    Int? memory
+    Int disk_size = 1 + 24 * ceil(size(fasta_xz, "GB") + size(metadata_xz, "GB"))
+  }
+  command <<<
+    set -v
+    echo "disk_size =" ~{disk_size}
+    echo "metadata =" ~{metadata}
+    echo "fasta =" ~{fasta}
+
+    xz --version
+    tsv-filter --version
+
+    mkdir data
+    xz --decompress --stdout ~{metadata_xz} \
+      | tsv-filter -H --str-in-fld ~{filter} \
+      | xz --stdout -2 > data/metadata_africa.tsv.xz
+
+    ls -lh data/metadata_africa.tsv.xz
+
+    xz --decompress --stdout data/metadata_africa.tsv.xz | wc -l
+
+    # Get strain names for genomes.
+    # GISAID uses virus name, collection date, and submission date
+    # delimited by a pipe character.
+    xz --decompress --stdout data/metadata_africa.tsv.xz \
+      | tsv-select -H -f 'virus','date','date_submitted' \
+      | sed 1d \
+      | awk -F "\t" '{ print $1"|"$2"|"$3 }' > data/strains_africa.txt
+
+    wget https://raw.githubusercontent.com/santiagosnchez/faSomeRecords/master/faSomeRecords.py
+
+    xz --decompress --stdout ~{fasta_xz} \
+      | python faSomeRecords.py --fasta /dev/stdin --list data/strains_africa.txt --stdout \
+      | xz --stdout -2 > data/sequences_africa.fasta.xz
+
+    xz --decompress --stdout data/sequences_africa.fasta.xz | grep -c ">"
+
+    ls -lh data/metadata_africa.tsv.xz data/sequences_africa.fasta.xz
+  >>>
+  output {
+    String out_str = read_string(stdout())
+    File out_seq = "data/sequences_africa.fasta.xz"
+    File out_met = "data/metadata_africa.tsv.xz"
+
+    #File out_seq = fasta
+    #File out_met = metadata
+  }
+  runtime {
+    docker : docker_img
+    cpu : select_first([cpu, 16])
+    memory: select_first([memory, 50]) + " GiB"
+    disks: "local-disk " + disk_size + " HDD"
+  }
+}
+
 # === Link tasks in a workflow
 workflow WRKFLW {
   input {
@@ -301,6 +368,9 @@ workflow WRKFLW {
     Int? cpu
     Int? memory       # in GiB
     Int? disk_size
+
+    File fasta_xz
+    File metadata_xz
   }
 
   call wdl_task {
@@ -318,37 +388,42 @@ workflow WRKFLW {
       memory = memory,
       disk_size = disk_size,
   }
-  scatter (in_str in some_strings) {
-    call parallel_step {input: in=in_str }
-  }
-  call gather_step { input: ins=parallel_step.stdout }
+#  scatter (in_str in some_strings) {
+#    call parallel_step {input: in=in_str }
+#  }
+#  call gather_step { input: ins=parallel_step.stdout }
+#
+#  if ( defined(large_file) ) {
+#    call xz_task { input: infile= select_first([large_file])}
+#    call zstd_task { input: infile= select_first([large_file])}
+#  }
+#
+#  call looper as loop1
+#  call looper as loop2 { input: infile=loop1.outfile }
+#  call looper as loop3 { input: infile=loop2.outfile }
+#
+#  call running_man as Bill { input: in_str="", text="Bill won!", speed = 1}
+#  call running_man as Jim { input: in_str="", text="Jim won!", speed = 10}
 
-  if ( defined(large_file) ) {
-    call xz_task { input: infile= select_first([large_file])}
-    call zstd_task { input: infile= select_first([large_file])}
-  }
-
-  call looper as loop1
-  call looper as loop2 { input: infile=loop1.outfile }
-  call looper as loop3 { input: infile=loop2.outfile }
-
-  call running_man as Bill { input: in_str="", text="Bill won!", speed = 1}
-  call running_man as Jim { input: in_str="", text="Jim won!", speed = 10}
+  call get_stats { input: fasta_xz = fasta_xz, metadata_xz = metadata_xz }
 
   output {
     Array[File] outputs = wdl_task.outputs
-    File env = wdl_task.env
-    File text = wdl_task.text
-    String stdout_str = wdl_task.stdout_str
-    String gather_echo = gather_step.stdout
+#    File env = wdl_task.env
+#    File text = wdl_task.text
+#    String stdout_str = wdl_task.stdout_str
+#    String gather_echo = gather_step.stdout
+#
+#    Array[File]? xz_out = xz_task.outfiles
+#    Array[File]? zstd_out = zstd_task.outfiles
+#    File looped = loop3.outfile
+#
+#    # force collision here by connecting to same workspace
+#    String bill_out = Bill.out_str
+#    String jim_out = Jim.out_str
 
-    Array[File]? xz_out = xz_task.outfiles
-    Array[File]? zstd_out = zstd_task.outfiles
-    File looped = loop3.outfile
-
-    # force collision here by connecting to same workspace
-    String bill_out = Bill.out_str
-    String jim_out = Jim.out_str
-
+    String STATOUT = get_stats.out_str
+    File sequences = get_stats.out_seq
+    File metadata = get_stats.out_met
   }
 }
