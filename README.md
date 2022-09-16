@@ -1,13 +1,14 @@
-# A WDL Pathogen Build
+# A WDL Pathogen Build - Array to DataTable
 
 **DO NOT MERGE!!!!**
 
-## Minimal Example
+Convert a Array[File] terra object into a tsv which can be imported as a Terra DataTable. This can simplify parallizable code if there is no expectation of a "gather" step at the end.
 
-This branch is for testing basic Terra task I/O before adding it to the main pathogen/ncov builds. The purpose of this branch is to separate Terra and snakemake testing of the pipeline.
+```
+echo -e  "~{sep=" " some_files}" > datatable.tsv
+```
+
 
 ## Links
 
-* [Dockstore: j23414/wdl\_pathogen\_build:zzz\_min](https://dockstore.org/workflows/github.com/j23414/wdl_pathogen_build:zzz_min?tab=info)
-* [Terra Documentation: execute!](https://support.terra.bio/hc/en-us/articles/360037487871-Execute-)
-* [FireCloud: Terra Workflows Quickstart](https://firecloud.terra.bio/#workspaces/fc-product-demo/Terra-Workflows-Quickstart)
+* [Dockstore: j23414/wdl\_pathogen\_build:array\_to\_datatable](https://dockstore.org/workflows/github.com/j23414/wdl_pathogen_build:array_to_datatable?tab=info)
