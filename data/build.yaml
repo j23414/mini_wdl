@@ -1,7 +1,0 @@
-inputs:
-  - name: example
-    metadata: https://raw.githubusercontent.com/nextstrain/ncov/master/data/example_metadata.tsv
-    sequences: https://github.com/nextstrain/ncov/raw/master/data/example_sequences.fasta.gz
-  - name: references
-    metadata: data/references_metadata.tsv
-    sequences: data/references_sequences.fasta

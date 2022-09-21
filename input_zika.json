@@ -1,7 +1,0 @@
-{
-  "Nextstrain_WRKFLW.sequence_fasta": "data/sequences.fasta",
-  "Nextstrain_WRKFLW.metadata_tsv": "data/metadata.tsv",
-  "Nextstrain_WRKFLW.build_name": "zika_build",
-  "Nextstrain_WRKFLW.giturl" : "https://github.com/nextstrain/zika-tutorial/archive/refs/heads/master.zip",  
-  "Nextstrain_WRKFLW.docker_path": "nextstrain/base:latest"
-}
