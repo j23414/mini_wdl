@@ -1,6 +1,6 @@
 version 1.0
 
-import "https://raw.githubusercontent.com/j23414/wdl_pathogen_build/main/tasks/nextstrain.wdl" as nextstrain
+import "https://raw.githubusercontent.com/nextstrain/ncov/master/workflow/wdl/tasks/nextstrain.wdl" as nextstrain
 
 workflow NCOV_BUILD {
   input {

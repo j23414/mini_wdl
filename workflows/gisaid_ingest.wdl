@@ -1,6 +1,6 @@
 version 1.0
 
-import "https://raw.githubusercontent.com/j23414/wdl_pathogen_build/main/tasks/ncov_ingest.wdl" as ncov_ingest
+import "https://raw.githubusercontent.com/nextstrain/ncov/master/workflow/wdl/tasks/ncov_ingest.wdl" as ncov_ingest
 
 workflow GISAID_INGEST {
   input {
