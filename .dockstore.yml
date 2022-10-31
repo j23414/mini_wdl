@@ -22,6 +22,27 @@ workflows:
      authors:
       - name: Nextstrain
    - subclass: WDL
+     primaryDescriptorPath: /workflows/zika_workflow.wdl
+     testParameterFiles:
+     - /workflows/zika_workflow.json
+     name: zika_build
+     authors:
+      - name: Nextstrain
+   - subclass: WDL
+     primaryDescriptorPath: /workflows/measles_workflow.wdl
+     testParameterFiles:
+     - /workflows/zika_workflow.json
+     name: measles_build
+     authors:
+      - name: Nextstrain
+   - subclass: WDL
+     primaryDescriptorPath: /workflows/dengue_workflow.wdl
+     testParameterFiles:
+     - /workflows/zika_workflow.json
+     name: dengue_build
+     authors:
+      - name: Nextstrain
+   - subclass: WDL
      primaryDescriptorPath: /workflows/template.wdl
      testParameterFiles:
      - /workflows/template.json

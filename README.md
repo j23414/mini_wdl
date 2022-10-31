@@ -14,6 +14,10 @@ Final code base will eventually be handed off to the nextstrain/ncov repo:
 |[j23414/wdl\_pathogen\_build/ncov:main](https://dockstore.org/workflows/github.com/j23414/wdl_pathogen_build/ncov:main?tab=info) | [nextstrain/ncov/ncov:master](https://dockstore.org/workflows/github.com/nextstrain/ncov/ncov:master?tab=info)|
 |[j23414/wdl\_pathogen\_build/genbank\_ingest:main](https://dockstore.org/workflows/github.com/j23414/wdl_pathogen_build/genbank_ingest:main?tab=info)| [nextstrain/ncov/gisaid_ingest:master](https://dockstore.org/workflows/github.com/nextstrain/ncov/gisaid_ingest:master?tab=info)|
 |[j23414/wdl\_pathogen\_build/gisaid\_ingest:main](https://dockstore.org/workflows/github.com/j23414/wdl_pathogen_build/gisaid_ingest:main?tab=info)| [nextstrain/ncov/genbank_ingest:master](https://dockstore.org/workflows/github.com/nextstrain/ncov/genbank_ingest:master?tab=info) |
+|[j23414/wdl\_pathogen\_build/zika_build:main](https://dockstore.org/workflows/github.com/j23414/wdl_pathogen_build/zika_build:main?tab=info) | Just a test |
+|[j23414/wdl\_pathogen\_build/measles_build:main](https://dockstore.org/workflows/github.com/j23414/wdl_pathogen_build/measles_build:main?tab=info) | Just a test |
+|[j23414/wdl\_pathogen\_build/dengue_build:main](https://dockstore.org/workflows/github.com/j23414/wdl_pathogen_build/dengue_build:main?tab=info) | Just a test |
+
 
 ## Benchmarking historical costs per 10K new samples
 
