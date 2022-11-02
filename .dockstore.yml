@@ -43,6 +43,13 @@ workflows:
      authors:
       - name: Nextstrain
    - subclass: WDL
+     primaryDescriptorPath: /workflows/dengue_ingest.wdl
+     testParameterFiles:
+     - /workflows/zika_workflow.json
+     name: dengue_ingest
+     authors:
+      - name: Nextstrain
+   - subclass: WDL
      primaryDescriptorPath: /workflows/template.wdl
      testParameterFiles:
      - /workflows/template.json

@@ -34,3 +34,35 @@ task pathogen_build {
     disks: 'local-disk ' + disk_size + ' HDD'
   }
 }
+
+task pathogen_ingest {
+  input{
+    String pathogen_giturl = "https://github.com/nextstrain/dengue/archive/refs/heads/ingest.zip"
+    Int cpu = 8
+    Int disk_size = 30 # Gb
+    Float memory = 3.5
+  }
+  command <<<
+    echo "cpu: ~{cpu} ; disk_size: ~{disk_size} ; memory: ~{memory}"
+    wget -O pathogen.zip ~{pathogen_giturl}
+    INDIR=`unzip -Z1 pathogen.zip | head -n1 | sed 's:/::g'`
+    unzip pathogen.zip
+
+    cd $INDIR/ingest
+    nextstrain build --native .
+    cd ../..
+
+    mv $INDIR/ingest/data .
+    ls -ltr data/*
+  >>>
+  output{
+    Array [File] sequences_fastas = glob("data/*.fasta")
+    Array [File] metadata_tsvs = glob("data/*.tsv")
+  }
+  runtime{
+    docker: 'nextstrain/ncov-ingest:latest'
+    cpu : cpu
+    memory: memory + ' GiB'
+    disks: 'local-disk ' + disk_size + ' HDD'
+  }
+}
