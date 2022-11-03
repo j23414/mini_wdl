@@ -15,6 +15,7 @@ task pathogen_build {
 
     cd $INDIR
     nextstrain build --native .
+
     cd ..
     mv $INDIR/auspice .
     zip -r auspice.zip auspice
@@ -22,10 +23,14 @@ task pathogen_build {
     mv $INDIR/results .
     cp $$INDIR/.snakemake/log/*.log results/.
     zip -r results.zip results
+
+    LAST_RUN=`date +%F`
+    echo ${LAST_RUN} > LAST_RUN
   >>>
   output{
     File auspice_zip = "auspice.zip"
     File results_zip = "results.zip"
+    String last_run = read_string("LAST_RUN")
   }
   runtime{
     docker: 'nextstrain/base:latest'

@@ -22,6 +22,13 @@ workflows:
      authors:
       - name: Nextstrain
    - subclass: WDL
+     primaryDescriptorPath: /workflows/pathogen_workflow.wdl
+     testParameterFiles:
+     - /workflows/zika_workflow.json
+     name: pathogen_build
+     authors:
+      - name: Nextstrain
+   - subclass: WDL
      primaryDescriptorPath: /workflows/zika_workflow.wdl
      testParameterFiles:
      - /workflows/zika_workflow.json
