@@ -72,6 +72,11 @@ task fetch_from_genbank {
     chmod +x bin/*
 
     bin/fetch-from-genbank ~{ncbi_taxon_id} > genbank.ndjson
+
+    if [[ ! -s genbank.ndjson ]]; then
+      echo "genbank.ndjson is empty" 1>&2
+      exit 1
+    fi
   >>>
   output {
     File genbank_ndjson="genbank.ndjson"
@@ -116,6 +121,10 @@ task transform_field_names {
       --field-map ~{field_map} \
     > genbank_tfn.ndjson
 
+    if [[ ! -s genbank_tfn.ndjson ]]; then
+      echo "genbank_tfn.ndjson is empty" 1>&2
+      exit 1
+    fi
   >>>
   output {
     File out_ndjson="genbank_tfn.ndjson"
@@ -142,6 +151,11 @@ task transform_string_fields {
     cat ~{ndjson} \
     | ./bin/transform-string-fields --normalize \
     > genbank_tsf.ndjson
+
+    if [[ ! -s genbank_tsf.ndjson ]]; then
+      echo "genbank_tsf.ndjson is empty" 1>&2
+      exit 1
+    fi
 
   >>>
   output {
@@ -174,6 +188,11 @@ task transform_strain_names {
       --backup-fields ~{strain_backup_fields} \
     > genbank_tsn.ndjson
 
+    if [[ ! -s genbank_tsn.ndjson ]]; then
+      echo "genbank_tsn.ndjson is empty" 1>&2
+      exit 1
+    fi
+
   >>>
   output {
     File out_ndjson="genbank_tsn.ndjson"
@@ -205,6 +224,11 @@ task transform_date_fields {
       --expected-date-formats ~{expected_date_formats} \
     > genbank_tdf.ndjson
 
+    if [[ ! -s genbank_tdf.ndjson ]]; then
+      echo "genbank_tdf.ndjson is empty" 1>&2
+      exit 1
+    fi
+
   >>>
   output {
     File out_ndjson="genbank_tdf.ndjson"
@@ -231,6 +255,11 @@ task transform_genbank_location {
     cat ~{ndjson} \
     | ./bin/transform-genbank-location \
     > genbank_tgl.ndjson
+
+    if [[ ! -s genbank_tgl.ndjson ]]; then
+      echo "genbank_tgl.ndjson is empty" 1>&2
+      exit 1
+    fi
 
   >>>
   output {
@@ -265,6 +294,11 @@ task transform_string_fields2 {
       --abbreviations ~{abbreviations} \
     > genbank_tsf2.ndjson
 
+    if [[ ! -s genbank_tsf2.ndjson ]]; then
+      echo "genbank_tsf2.ndjson is empty" 1>&2
+      exit 1
+    fi
+
   >>>
   output {
     File out_ndjson="genbank_tsf2.ndjson"
@@ -298,6 +332,11 @@ task transform_authors {
       --abbr-authors-field ~{abbr_authors_field} \
     > genbank_ta.ndjson
 
+    if [[ ! -s genbank_ta.ndjson ]]; then
+      echo "genbank_ta.ndjson is empty" 1>&2
+      exit 1
+    fi
+
   >>>
   output {
     File out_ndjson="genbank_ta.ndjson"
@@ -326,6 +365,12 @@ task apply_geolocation_rules {
     | ./bin/apply-geolocation-rules \
       --geolocation-rules ~{all_geolocation_rules} \
     > genbank_agr.ndjson
+    
+    if [[ ! -s genbank_agr.ndjson ]]; then
+      echo "genbank_agr.ndjson is empty" 1>&2
+      exit 1
+    fi    
+
   >>>
   output {
     File out_ndjson="genbank_agr.ndjson"
@@ -357,6 +402,11 @@ task merge_user_metadata {
       --annotations annotations.tsv \
       --id-field ~{annotations_id} \
     > genbank_mum.ndjson
+
+    if [[ ! -s genbank_mum.ndjson ]]; then
+      echo "genbank_mum.ndjson is empty" 1>&2
+      exit 1
+    fi
   >>>
   output {
     File out_ndjson="genbank_mum.ndjson"
@@ -385,11 +435,21 @@ task ndjson_to_tsv_and_fasta {
     # (2) Transform ndjson to tsv and fasta
     cat ~{ndjson} \
     | ./bin/ndjson-to-tsv-and-fasta \
-      --metadata-columns ~{metadata_columns} \
+      --metadata-columns "~{metadata_columns}" \
       --metadata raw_metadata.tsv \
       --fasta sequences.fasta \
       --id-field ~{id_field} \
       --sequence-field ~{sequence_field}
+
+    
+    if [[ ! -s raw_metadata.tsv ]]; then
+      echo "raw_metadata.tsv is empty" 1>&2
+      exit 1
+    fi
+    if [[ ! -s sequences.fasta ]]; then
+      echo "sequences.fasta is empty" 1>&2
+      exit 1
+    fi
   >>>
   output {
     File sequences="sequences.fasta"
@@ -415,6 +475,11 @@ task post_process_metadata {
 
     # (2) Post process metadata
     ./bin/post_process_metadata.py --metadata ~{metadata} --outfile metadata.tsv
+
+    if [[ ! -s metadata.tsv ]]; then
+      echo "metadata.tsv is empty" 1>&2
+      exit 1
+    fi
   >>>
   output {
     File out_metadata="metadata.tsv"
