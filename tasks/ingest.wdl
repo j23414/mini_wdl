@@ -435,7 +435,7 @@ task ndjson_to_tsv_and_fasta {
     # (2) Transform ndjson to tsv and fasta
     cat ~{ndjson} \
     | ./bin/ndjson-to-tsv-and-fasta \
-      --metadata-columns "~{metadata_columns}" \
+      --metadata-columns ~{metadata_columns} \
       --metadata raw_metadata.tsv \
       --fasta sequences.fasta \
       --id-field ~{id_field} \
