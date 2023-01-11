@@ -42,6 +42,9 @@ task fetch_ncbi_dataset_package {
   }
   runtime {
     docker: 'staphb/ncbi-datasets:latest'
+    cpu : 16
+    memory: '64 GiB'
+    disks: 'local-disk 1500 HDD'
   }
 }
 
@@ -58,6 +61,9 @@ task extract_ncbi_dataset_sequences {
   }
   runtime {
     docker: 'ubuntu'
+    cpu : 16
+    memory: '64 GiB'
+    disks: 'local-disk 1500 HDD'
   }
 }
 
@@ -77,6 +83,9 @@ task format_ncbi_dataset_report {
   }
   runtime {
     docker: 'staphb/ncbi-datasets:latest'
+    cpu : 16
+    memory: '64 GiB'
+    disks: 'local-disk 1500 HDD'
   }
 }
 
@@ -100,5 +109,8 @@ task create_genbank_ndjson {
   }
   runtime {
     docker: 'nextstrain/ncov-ingest:latest'
+    cpu : 16
+    memory: '64 GiB'
+    disks: 'local-disk 1500 HDD'
   }
 }
