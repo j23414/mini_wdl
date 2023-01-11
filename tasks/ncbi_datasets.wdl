@@ -2,32 +2,29 @@ version 1.0
 
 workflow NCBI_DATASETS {
   input {
-    String virus_name='zika'
+    String virus_name='SARS-CoV-2'
   }
-  call ncbi_datasets {
+  
+  call fetch_ncbi_dataset_package {
     input:
       virus_name=virus_name
   }
+  call extract_ncbi_dataset_sequences {
+    input:
+      dataset_package=fetch_ncbi_dataset_package.ncbi_dataset_sequences
+  }
+  call format_ncbi_dataset_report {
+    input:
+      dataset_package=fetch_ncbi_dataset_package.ncbi_dataset_sequences
+  }
+  call create_genbank_ndjson {
+    input:
+      ncbi_dataset_sequences=extract_ncbi_dataset_sequences.ncbi_dataset_sequences,
+      ncbi_dataset_tsv=format_ncbi_dataset_report.ncbi_dataset_tsv
+  }
+  
   output {
-    Array[File] outfiles=ncbi_datasets.outfiles
-  }
-}
-
-task ncbi_datasets {
-  input {
-    String virus_name='zika'
-  }
-  command <<<
-    datasets download virus genome taxon ~{virus_name}
-  >>>
-  output {
-    Array[File] outfiles = glob("*")
-  }
-  runtime {
-    docker: 'staphb/ncbi-datasets:latest'
-    cpu: 8
-    memory: '4 GiB'
-    disks: 'local-disk 100 HDD'
+    File outfile=create_genbank_ndjson.ndjson
   }
 }
 
