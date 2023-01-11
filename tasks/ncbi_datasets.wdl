@@ -60,7 +60,7 @@ task extract_ncbi_dataset_sequences {
     File ncbi_dataset_sequences="ncbi_dataset_sequences.fasta"
   }
   runtime {
-    docker: 'ubuntu'
+    docker: 'docker: 'staphb/ncbi-datasets:latest'
     cpu : 16
     memory: '64 GiB'
     disks: 'local-disk 1500 HDD'
